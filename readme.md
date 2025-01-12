@@ -1,6 +1,6 @@
-# Pickify - Django E-commerce Platform
+# Picklify - Django E-commerce Platform
 
-Welcome to **Pickify**, an advanced e-commerce platform built using the Django framework. This project is designed to provide users with a seamless online shopping experience with features like user registration, email verification, load testing, and payment gateway integration.
+Welcome to **Picklify**, an advanced e-commerce platform built using the Django framework. This project is designed to provide users with a seamless online shopping experience with features like user registration, email verification, load testing, and payment gateway integration.
 
 ---
 
@@ -48,5 +48,5 @@ Welcome to **Pickify**, an advanced e-commerce platform built using the Django f
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/rahull0328/pickify.git
-   cd pickify
+   git clone https://github.com/rahull0328/Picklify.git
+   cd Picklify
