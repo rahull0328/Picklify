@@ -49,4 +49,24 @@ Welcome to **Picklify**, an advanced e-commerce platform built using the Django 
 1. Clone the repository:
    ```bash
    git clone https://github.com/rahull0328/Picklify.git
-   cd Picklify
+
+2. Creating Virtual Environment:
+   ```bash
+   python venv env
+   
+3. Activating the virtual environment:
+   ```bash
+   cd env/scripts/activate
+
+4. Starting the Development Server:
+   ```bash
+   cd picklify
+   python manage.py runserver
+
+---
+
+## 🤝 Contributions
+
+Contributions are welcome! 🎉 If you have suggestions or want to report bugs, feel free to open an issue or create a pull request.
+
+---
