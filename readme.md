@@ -1,4 +1,4 @@
-# Picklify - Django E-commerce Platform
+# Picklify - E-commerce Platform
 
 Welcome to **Picklify**, an advanced e-commerce platform built using the Django framework. This project is designed to provide users with a seamless online shopping experience with features like user registration, email verification, load testing, and payment gateway integration.
 
