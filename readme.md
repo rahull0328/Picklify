@@ -64,9 +64,3 @@ Welcome to **Picklify**, an advanced e-commerce platform built using the Django 
    python manage.py runserver
 
 ---
-
-## 🤝 Contributions
-
-Contributions are welcome! 🎉 If you have suggestions or want to report bugs, feel free to open an issue or create a pull request.
-
----
