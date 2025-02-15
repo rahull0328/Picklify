@@ -50,38 +50,45 @@
         text-align: center;
       }
 
-      /* Button Styling */
-      .custom-button {
-        background: linear-gradient(45deg, #ff416c, #ff4b2b);
-        color: #fff;
+      /* Register Button Styling - Simple & Elegant */
+      .register-btn {
+        background-color: #ff6b6b; /* Soft red */
+        color: white;
         padding: 12px 30px;
         font-size: 18px;
         font-weight: bold;
         text-transform: uppercase;
         border: none;
-        border-radius: 50px;
+        border-radius: 8px; /* Slightly rounded corners */
         cursor: pointer;
-        transition: all 0.4s ease;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+        display: block; /* Makes button take full width */
+        width: 100%; /* Ensures full width for alignment */
+        text-align: center;
+        margin-bottom: 15px; /* Space below the button */
       }
 
-      .custom-button:hover {
-        background: linear-gradient(45deg, #ff4b2b, #ff416c);
-        box-shadow: 0 0 20px #ff416c, 0 0 40px #ff4b2b;
+      /* Remove hover effects */
+      .register-btn:hover {
+        background-color: #ff6b6b; /* Same color, no effect */
+        box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1); /* No glow effect */
       }
 
       /* Login Link Styling */
       .login-link {
-        display: block;
-        margin-top: 15px;
+        display: block; /* Ensures it's on a new line */
+        margin-top: 10px;
         font-size: 16px;
-        color: #ff416c;
+        color: #333;
         text-decoration: none;
         font-weight: bold;
+        text-align: center; /* Centers the text */
         transition: color 0.3s ease;
       }
 
       .login-link:hover {
-        color: #ff4b2b;
+        color: #666;
         text-decoration: underline;
       }
     </style>
@@ -93,18 +100,28 @@
         <h2>Welcome to Picklify!</h2>
         <p>Create your account and start shopping in style!</p>
         <form class="register-form" method="POST">
-          {% csrf_token %} 
-          {% include "base/alert.html" %}
+          {% csrf_token %} {% include "base/alert.html" %}
           <div class="form-floating mb-3">
             <input
               type="text"
               class="form-control"
-              id="username"
-              name="username"
-              placeholder="Full Name"
+              id="firstname"
+              name="firstname"
+              placeholder="John"
               required
             />
-            <label for="username">Full Name</label>
+            <label for="firstname">First Name</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="lastname"
+              name="lastname"
+              placeholder="Doe"
+              required
+            />
+            <label for="lastname">Last Name</label>
           </div>
           <div class="form-floating mb-3">
             <input
@@ -129,7 +146,10 @@
             <label for="password">Password</label>
           </div>
 
-          <button type="submit" class="btn custom-button">Register Now</button>
+          <button type="submit" class="btn custom-button register-btn">
+            Register Now
+          </button>
+          <!-- Move login link below -->
           <a href="" class="login-link">Already have an account? Log in</a>
         </form>
       </div>
