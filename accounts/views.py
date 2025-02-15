@@ -1,11 +1,38 @@
 from django.shortcuts import render
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render, redirect
+from .models import Profile
 
 # Create your views here.
 
 def login_page(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        user_obj = User.objects.filter(username = email)
+
+        #returning the user error if account doesn't exist
+        if not user_obj.exists():
+            messages.warning(request, 'Account not found!')
+            return HttpResponseRedirect(request.path_info)
+
+        #returning the user error if email isn't verified
+        if not user_obj[0].profile.is_email_verified:
+            messages.warning(request, 'Your account is not verified!')
+            return HttpResponseRedirect(request.path_info)
+
+        #authenticating the user and redirecting to home page if user is valid and email is verified
+        user_obj = authenticate(username = email , password= password)
+        if user_obj:
+            login(request , user_obj)
+            return redirect('/')
+
+        messages.warning(request, 'Invalid Creds!')
+        return HttpResponseRedirect(request.path_info)
+    
     return render(request, 'accounts/login.html')
 
 def register_page(request):
@@ -31,3 +58,13 @@ def register_page(request):
         return HttpResponseRedirect(request.path_info)
         
     return render(request, 'accounts/register.html')
+
+def activate_email(request, email_token):
+    try:
+        user = Profile.objects.get(email_token=email_token)
+        user.is_email_verified = True
+        user.save()
+        return redirect('/')
+    
+    except Exception as e:
+        return HttpResponse('Invalid Email Token !')    

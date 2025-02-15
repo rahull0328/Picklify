@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Activate Your Picklify Account</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .email-wrapper {
+            width: 100%;
+            padding: 40px 0;
+        }
+        .email-container {
+            background-color: #333;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            width: 120px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #ddd;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #ff6600;
+            color: #ffffff;
+            padding: 12px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .cta-button:hover {
+            background: #e65c00;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="email-wrapper">
+        <div class="email-container">
+            <!-- Picklify Logo (Replace URL with actual logo path) -->
+            <img src="cid:logo" alt="Picklify Logo" class="logo">
+
+            <h2>Welcome to Picklify!</h2>
+            <p>Thank you for joining us. Your shopping experience is about to get even better!</p>
+            <p>Click the button below to activate your account and start exploring amazing products.</p>
+
+            <a href="http://127.0.0.1:8000/accounts/activate/{{ email_token }}" class="cta-button">Activate Account</a>
+
+            <p class="footer">If you did not sign up for Picklify, please ignore this email.</p>
+        </div>
+    </div>
+
+</body>
+</html>
