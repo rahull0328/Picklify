@@ -50,4 +50,4 @@ __pycache__/
 */migrations/*
 .env
 
-/picklifyVENV/
+env/
