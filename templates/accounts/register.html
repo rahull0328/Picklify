@@ -45,13 +45,12 @@
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
         backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.18);
-        width: 100%;
-        max-width: 400px;
+        width: 400px;
         text-align: center;
       }
 
-      /* Register Button Styling - Simple & Elegant */
-      .register-btn {
+      /* Button Styling - Simple & Elegant */
+      .custom-button {
         background-color: #ff6b6b; /* Soft red */
         color: white;
         padding: 12px 30px;
@@ -59,7 +58,7 @@
         font-weight: bold;
         text-transform: uppercase;
         border: none;
-        border-radius: 8px; /* Slightly rounded corners */
+        border-radius: 8px;
         cursor: pointer;
         transition: all 0.3s ease-in-out;
         box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
@@ -70,24 +69,27 @@
       }
 
       /* Remove hover effects */
-      .register-btn:hover {
-        background-color: #ff6b6b; /* Same color, no effect */
-        box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1); /* No glow effect */
+      .custom-button:focus,
+      .custom-button:focus-visible {
+        background-color: #ff6b6b !important; /* Ensure background remains the same */
+        color: white !important; /* Keep text color intact */
+        outline: none; /* Remove default Bootstrap outline */
+        box-shadow: 0 0 5px rgba(255, 107, 107, 0.6); /* Optional: Add a subtle glow effect */
       }
 
-      /* Login Link Styling */
-      .login-link {
+      /* Register Link Styling */
+      .register-link {
         display: block;
         margin-top: 10px;
         font-size: 16px;
         color: #333;
         text-decoration: none;
         font-weight: bold;
-        text-align: center;
+        text-align: center; /* Centers the text */
         transition: color 0.3s ease;
       }
 
-      .login-link:hover {
+      .register-link:hover {
         color: #666;
         text-decoration: underline;
       }
@@ -98,7 +100,7 @@
     <div class="register-page">
       <div class="form-container">
         <h2>Welcome to Picklify!</h2>
-        <p>Create your account and start shopping in style!</p>
+        <p>Create account & start shopping in style!</p>
         <form class="register-form" method="POST">
           {% csrf_token %} {% include "base/alert.html" %}
           <div class="form-floating mb-3">
@@ -150,7 +152,7 @@
             Register Now
           </button>
           <!-- Move login link below -->
-          <a href="" class="login-link">Already have an account? Log in</a>
+          <a href="{% url 'login' %}" class="register-link">Already have an account? Log in</a>
         </form>
       </div>
     </div>
