@@ -20,7 +20,7 @@ def send_account_activation_email(email, email_token):
     email_message.attach_alternative(html_message, "text/html")
 
     # Attach the image
-    logo_path = os.path.join(settings.BASE_DIR, "public/static/images/logo.webp")  # Adjust path as needed
+    logo_path = os.path.join(settings.BASE_DIR, "public/static/img/logo.webp")  # Adjust path as needed
     try:
         with open(logo_path, "rb") as img_file:
             logo = MIMEImage(img_file.read(), _subtype="webp")
