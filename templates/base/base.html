@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,22 +6,22 @@
   <!-- Required meta tags -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <link rel="icon" href="/public/static/img/favicon.png" type="image/png" />
-  <title>Eiser ecommerce</title>
+  <link rel="icon" href=" {% static "img/favicon.png" %} " type="image/png" />
+  <title>Picklify - Ecommerce</title>
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="/public/static/css/bootstrap.css" />
-  <link rel="stylesheet" href="/public/static/vendors/linericon/style.css" />
-  <link rel="stylesheet" href="/public/static/css/font-awesome.min.css" />
-  <link rel="stylesheet" href="/public/static/css/themify-icons.css" />
-  <link rel="stylesheet" href="/public/static/css/flaticon.css" />
-  <link rel="stylesheet" href="/public/static/vendors/owl-carousel/owl.carousel.min.css" />
-  <link rel="stylesheet" href="/public/static/vendors/lightbox/simpleLightbox.css" />
-  <link rel="stylesheet" href="/public/static/vendors/nice-select/css/nice-select.css" />
-  <link rel="stylesheet" href="/public/static/vendors/animate-css/animate.css" />
-  <link rel="stylesheet" href="/public/static/vendors/jquery-ui/jquery-ui.css" />
+  <link rel="stylesheet" href="{% static "css/bootstrap.css" %}" />
+  <link rel="stylesheet" href="{% static "vendors/linericon/style.css" %}" />
+  <link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}" />
+  <link rel="stylesheet" href="{% static "css/themify-icons.css" %}" />
+  <link rel="stylesheet" href="{% static 'css/flaticon.css' %}" />
+  <link rel="stylesheet" href="{% static 'vendors/owl-carousel/owl.carousel.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'vendors/lightbox/simpleLightbox.css' %}" />
+  <link rel="stylesheet" href="{% static 'vendors/nice-select/css/nice-select.css' %}" />
+  <link rel="stylesheet" href="{% static 'vendors/animate-css/animate.css' %}" />
+  <link rel="stylesheet" href="{% static 'vendors/jquery-ui/jquery-ui.css' %}" />
   <!-- main css -->
-  <link rel="stylesheet" href="/public/static/css/style.css" />
-  <link rel="stylesheet" href="/public/static/css/responsive.css" />
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/responsive.css' %}" />
 </head>
 
 <body>
@@ -64,7 +65,7 @@
         <nav class="navbar navbar-expand-lg navbar-light w-100">
           <!-- Brand and toggle get grouped for better mobile display -->
           <a class="navbar-brand logo_h" href="index.html">
-            <img src="img/logo.png" alt="" />
+            <img src="{% static "img/logo.png" %}" alt="" />
           </a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
