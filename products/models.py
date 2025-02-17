@@ -22,10 +22,10 @@ class Product(BaseModel):
     product_desription = models.TextField()
     
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.category_name)
+        self.slug = slugify(self.product_name)
         super(Product, self).save(*args, **kwargs)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.product_name
     
 class ProductImage(BaseModel):
