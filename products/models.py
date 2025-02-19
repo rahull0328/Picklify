@@ -31,19 +31,20 @@ class Product(BaseModel):
 
 class ProductImage(BaseModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="product_images")
-    image = models.ImageField(upload_to="product")
+    image = models.ImageField(upload_to="product") 
 
+    def __str__(self):
+        return f"Image for {self.product.product_name}"
+    
     def save(self, *args, **kwargs):
-        """Resize the image to 60x60 before saving."""
         super(ProductImage, self).save(*args, **kwargs)
 
-        # Get the image path
+        # Avoid resizing here to preserve quality
         img_path = self.image.path
         img = Image.open(img_path)
 
-        # Resize image to 60x60
-        img = img.resize((70, 70), Image.Resampling.LANCZOS)
-        img.save(img_path)  # Save the resized image
+        # Convert to RGB (if necessary)
+        img = img.convert("RGB")
 
     def __str__(self):
         return f"Image for {self.product.product_name}"
