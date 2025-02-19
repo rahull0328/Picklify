@@ -38,7 +38,11 @@
                 data-slide-to="{{ forloop.counter0 }}"
                 class="{% if forloop.first %}active{% endif %}"
               >
-                <img src="/media/{{image.image}}" alt="" />
+                <img 
+                src="/media/{{image.image}}" 
+                alt="{{ product.product_name }}" 
+                style="width: 60px; height: 60px; object-fit: cover;"
+                />
               </li>
               {% endfor %}
             </ol>
@@ -50,7 +54,8 @@
                 <img
                   class="d-block w-100"
                   src="{{ image.image.url }}"
-                  alt="Product Image"
+                  style="width: 450px; height: 550px; object-fit: cover;"
+                  alt="{{ product.product_name }}"
                 />
               </div>
               {% endfor %}
