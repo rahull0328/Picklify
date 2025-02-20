@@ -1,8 +1,6 @@
 from django.shortcuts import render
-from products.models import Product
-
-# Create your views here.
+from products.views import get_random_products
 
 def index(request):
-    context = {'products' : Product.objects.all()}
+    context = {'products': get_random_products()}
     return render(request, 'home/index.html', context)
