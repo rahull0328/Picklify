@@ -32,7 +32,7 @@ Welcome to **Picklify**, an advanced e-commerce platform built using the Django 
 - **Frontend**: HTML, CSS, JavaScript
 - **Backend**: Django
 - **Database**: SQLite (or PostgreSQL for production)
-- **Payment Gateway**: Stripe/PayPal (replace with the one you're using)
+- **Payment Gateway**: Stripe
 
 ---
 
