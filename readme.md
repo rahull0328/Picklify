@@ -4,7 +4,7 @@ Welcome to **Picklify**, an advanced e-commerce platform built using the Django 
 
 ---
 
-## 🔥 Features
+## 🔥 Features :
 
 ### ✅ User Authentication
 - **Register**: Users can sign up with a valid email address and password.
