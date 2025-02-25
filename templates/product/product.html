@@ -1,20 +1,5 @@
 {% extends 'base/base.html' %} {% load static %} {% block content %}
 <style>
-.product_options {
-    display: flex;
-    flex-direction: column;
-    margin: 20px 0;
-}
-
-.size_selection, .color_selection {
-    margin-bottom: 15px;
-}
-
-.size_select {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100%; /* Make it responsive */
-}
 
 .color_buttons {
     display: flex;
@@ -26,8 +11,8 @@
 }
 
 .color_option + label {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     display: inline-block;
     cursor: pointer;
@@ -37,6 +22,7 @@
 .color_option:checked + label {
     border: 3px solid #000; /* Highlight selected color */
 }
+
 </style>
 
 <!--================Home Banner Area =================-->
@@ -94,7 +80,7 @@
                 <img
                   class="d-block w-100"
                   src="{{ image.image.url }}"
-                  style="width: 450px; height: 550px; object-fit: cover;"
+                  style="width: 500px; height: 650px; object-fit: cover;"
                   alt="{{ product.product_name }}"
                 />
               </div>
@@ -118,15 +104,15 @@
             </li>
           </ul>
           <p>{{product.product_description}}</p>
-          <div class="product_options">
-              <div class="size_selection">
-                  <label for="size">Size:</label>
-                  <select id="size" name="size" class="size_select">
-                      <option value="s">Small</option>
-                      <option value="m">Medium</option>
-                      <option value="l">Large</option>
-                      <option value="xl">Extra Large</option>
-                  </select>
+            <div class="form-group col-md mb-2">
+              <label for="size">Size:</label>
+              <div class="mt-1">
+                {% for size in product.size_variant.all %}
+                  <label class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" name="select_size" checked="" class="custom-control-input">
+                    <div class="custom-control-label">{{ size.size_name }}</div>
+                  </label>
+                {% endfor %}
               </div>
               <div class="color_selection">
                   <label for="color">Color:</label>
@@ -141,7 +127,7 @@
                       <label for="black" style="background-color: black;"></label>
                   </div>
               </div>
-          </div>
+            </div>
 
           <div class="product_count">
             <label for="qty">Quantity:</label>
@@ -249,8 +235,7 @@
               <div class="review_item">
                 <div class="media">
                   <div class="d-flex">
-                    <img src="{% static
-                    "img/product/single-product/review-1.png" %}" alt="" />
+                    <img src="{% static "img/product/single-product/review-1.png" %}" alt="" />
                   </div>
                   <div class="media-body">
                     <h4>Blake Ruiz</h4>
@@ -268,8 +253,7 @@
               <div class="review_item reply">
                 <div class="media">
                   <div class="d-flex">
-                    <img src="{% static
-                    "img/product/single-product/review-2.png" %}" alt="" />
+                    <img src="{% static "img/product/single-product/review-2.png" %}" alt="" />
                   </div>
                   <div class="media-body">
                     <h4>Blake Ruiz</h4>
@@ -287,8 +271,7 @@
               <div class="review_item">
                 <div class="media">
                   <div class="d-flex">
-                    <img src="{% static
-                    "img/product/single-product/review-3.png" %}" alt="" />
+                    <img src="{% static "img/product/single-product/review-3.png" %}" alt="" />
                   </div>
                   <div class="media-body">
                     <h4>Blake Ruiz</h4>
@@ -446,8 +429,7 @@
               <div class="review_item">
                 <div class="media">
                   <div class="d-flex">
-                    <img src="{% static
-                    "img/product/single-product/review-1.png" %}" alt="" />
+                    <img src="{% static "img/product/single-product/review-1.png" %}" alt="" />
                   </div>
                   <div class="media-body">
                     <h4>Blake Ruiz</h4>
@@ -468,8 +450,7 @@
               <div class="review_item">
                 <div class="media">
                   <div class="d-flex">
-                    <img src="{% static
-                    "img/product/single-product/review-2.png" %}" alt="" />
+                    <img src="{% static "img/product/single-product/review-2.png" %}" alt="" />
                   </div>
                   <div class="media-body">
                     <h4>Blake Ruiz</h4>
@@ -490,8 +471,7 @@
               <div class="review_item">
                 <div class="media">
                   <div class="d-flex">
-                    <img src="{% static
-                    "img/product/single-product/review-3.png" %}" alt="" />
+                    <img src="{% static "img/product/single-product/review-3.png" %}" alt="" />
                   </div>
                   <div class="media-body">
                     <h4>Blake Ruiz</h4>
@@ -543,7 +523,7 @@
                 </li>
               </ul>
               <p>Outstanding</p>
-              <form
+              <div
                 class="row contact_form"
                 method="post"
                 id="contactForm"
@@ -598,7 +578,6 @@
                     Submit Now
                   </button>
                 </div>
-              </form>
             </div>
           </div>
         </div>
