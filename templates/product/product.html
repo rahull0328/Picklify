@@ -1,4 +1,44 @@
 {% extends 'base/base.html' %} {% load static %} {% block content %}
+<style>
+.product_options {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0;
+}
+
+.size_selection, .color_selection {
+    margin-bottom: 15px;
+}
+
+.size_select {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%; /* Make it responsive */
+}
+
+.color_buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.color_option {
+    display: none; /* Hide the default radio button */
+}
+
+.color_option + label {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+    border: 1px solid #ccc; /* Optional border for better visibility */
+}
+
+.color_option:checked + label {
+    border: 3px solid #000; /* Highlight selected color */
+}
+</style>
+
 <!--================Home Banner Area =================-->
 <section class="banner_area">
   <div class="banner_inner d-flex align-items-center">
@@ -78,6 +118,31 @@
             </li>
           </ul>
           <p>{{product.product_description}}</p>
+          <div class="product_options">
+              <div class="size_selection">
+                  <label for="size">Size:</label>
+                  <select id="size" name="size" class="size_select">
+                      <option value="s">Small</option>
+                      <option value="m">Medium</option>
+                      <option value="l">Large</option>
+                      <option value="xl">Extra Large</option>
+                  </select>
+              </div>
+              <div class="color_selection">
+                  <label for="color">Color:</label>
+                  <div class="color_buttons">
+                      <input type="radio" id="red" name="color" value="red" class="color_option">
+                      <label for="red" style="background-color: red;"></label>
+                      <input type="radio" id="blue" name="color" value="blue" class="color_option">
+                      <label for="blue" style="background-color: blue;"></label>
+                      <input type="radio" id="green" name="color" value="green" class="color_option">
+                      <label for="green" style="background-color: green;"></label>
+                      <input type="radio" id="black" name="color" value="black" class="color_option">
+                      <label for="black" style="background-color: black;"></label>
+                  </div>
+              </div>
+          </div>
+
           <div class="product_count">
             <label for="qty">Quantity:</label>
             <input
@@ -139,18 +204,6 @@
       <li class="nav-item">
         <a
           class="nav-link"
-          id="profile-tab"
-          data-toggle="tab"
-          href="#profile"
-          role="tab"
-          aria-controls="profile"
-          aria-selected="false"
-          >Specification</a
-        >
-      </li>
-      <li class="nav-item">
-        <a
-          class="nav-link"
           id="contact-tab"
           data-toggle="tab"
           href="#contact"
@@ -183,83 +236,6 @@
         <p>
           {{product.product_description}}
         </p>
-      </div>
-      <div
-        class="tab-pane fade"
-        id="profile"
-        role="tabpanel"
-        aria-labelledby="profile-tab"
-      >
-        <div class="table-responsive">
-          <table class="table">
-            <tbody>
-              <tr>
-                <td>
-                  <h5>Width</h5>
-                </td>
-                <td>
-                  <h5>128mm</h5>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <h5>Height</h5>
-                </td>
-                <td>
-                  <h5>508mm</h5>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <h5>Depth</h5>
-                </td>
-                <td>
-                  <h5>85mm</h5>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <h5>Weight</h5>
-                </td>
-                <td>
-                  <h5>52gm</h5>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <h5>Quality checking</h5>
-                </td>
-                <td>
-                  <h5>yes</h5>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <h5>Freshness Duration</h5>
-                </td>
-                <td>
-                  <h5>03days</h5>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <h5>When packeting</h5>
-                </td>
-                <td>
-                  <h5>Without touch of hand</h5>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <h5>Each Box contains</h5>
-                </td>
-                <td>
-                  <h5>60pcs</h5>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
       <div
         class="tab-pane fade"
