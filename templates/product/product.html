@@ -92,7 +92,13 @@
       <div class="col-lg-5 offset-lg-1">
         <div class="s_product_text">
           <h3>{{product.product_name}}</h3>
-          <h2>₹{{product.price}}</h2>
+          <h2>
+            {% if updated_price %}
+            ₹{{updated_price}}
+            {% else %}
+            ₹{{product.price}}
+            {% endif %}
+          </h2>
           <ul class="list">
             <li>
               <a class="active" href="#">
@@ -109,7 +115,7 @@
               <div class="mt-1">
                 {% for size in product.size_variant.all %}
                   <label class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" name="select_size" checked="" class="custom-control-input">
+                    <input type="radio" onchange="getCorrectPrice('{{size.size_name}}')" name="select_size" {% if selected_size == size.size_name %} checked="" {% endif %} class="custom-control-input">
                     <div class="custom-control-label">{{ size.size_name }}</div>
                   </label>
                 {% endfor %}
@@ -586,5 +592,11 @@
   </div>
 </section>
 <!--================End Product Description Area =================-->
+
+<script>
+  function getCorrectPrice(size) {
+    window.location.href = window.location.pathname +  `?size="${size}`
+  }
+</script>
 
 {% endblock %}
