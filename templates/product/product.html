@@ -121,17 +121,13 @@
                 {% endfor %}
               </div>
               <div class="color_selection">
-                  <label for="color">Color:</label>
-                  <div class="color_buttons">
-                      <input type="radio" id="red" name="color" value="red" class="color_option">
-                      <label for="red" style="background-color: red;"></label>
-                      <input type="radio" id="blue" name="color" value="blue" class="color_option">
-                      <label for="blue" style="background-color: blue;"></label>
-                      <input type="radio" id="green" name="color" value="green" class="color_option">
-                      <label for="green" style="background-color: green;"></label>
-                      <input type="radio" id="black" name="color" value="black" class="color_option">
-                      <label for="black" style="background-color: black;"></label>
-                  </div>
+                <label for="color">Color:</label>
+                <div class="color_buttons">
+                    {% for color in product.color_variant.all %}
+                        <input type="radio" id="{{ color.color_name|lower }}" name="color" value="{{ color.color_name }}" class="color_option">
+                        <label for="{{ color.color_name|lower }}" style="background-color: {{ color.color_name|lower }};"></label>
+                    {% endfor %}
+                </div>
               </div>
             </div>
 
@@ -595,8 +591,17 @@
 
 <script>
   function getCorrectPrice(size) {
-    window.location.href = window.location.pathname +  `?size="${size}`
+    window.location.href = window.location.pathname +  `?size=${size}`
   }
+  
+  document.querySelectorAll('.color_option').forEach(button => {
+    button.addEventListener('change', function () {
+        const selectedColor = this.value;
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.set('color', selectedColor); // Update URL with selected color
+        window.location.href = currentUrl.toString(); // Reload page with new color parameter
+    });
+  });
 </script>
 
 {% endblock %}

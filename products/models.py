@@ -48,6 +48,9 @@ class Product(BaseModel):
     def get_product_size_by_size(self, size):
         return self.price + SizeVariant.objects.get(size_name = size).price
     
+    def get_products_by_color(self, color):
+        return Product.objects.filter(color_variant__color_name=color)
+    
 class ProductImage(BaseModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="product_images")
     image = models.ImageField(upload_to="product") 
@@ -67,3 +70,9 @@ class ProductImage(BaseModel):
 
     def __str__(self):
         return f"Image for {self.product.product_name}"
+
+class coupon(BaseModel):
+    coupon_code = models.CharField(max_length=10)
+    is_expired = models.BooleanField(default=False)
+    discount_price = models.IntegerField(default=100)
+    minimum_amount = models.IntegerField(default=500)
