@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'products',
     'accounts',
     'home',
+    'cart',
 ]
 
 # Middleware
