@@ -5,6 +5,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from .models import Profile
+from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.contrib.auth.decorators import login_required
+from accounts.models import Cart, CartItems, SizeVariant, ColorVariant
+from products.models import *
 
 # Create your views here.
 
@@ -70,4 +74,54 @@ def activate_email(request, email_token):
         return HttpResponse('Invalid Email Token !')    
     
 def cart(request):
-    return render(request, 'cart/cart.html')
+    context = {'cart': Cart.objects.filter(is_paid=False, user = request.user)}
+    return render(request, 'cart/cart.html', context)
+
+@login_required  # Ensures only logged-in users can access this function
+def add_to_cart(request, uid):
+    user = request.user
+
+    if not user.is_authenticated:  # Double-check for extra security
+        return redirect('login')  # Redirect to login page
+
+    try:
+        product = Product.objects.get(uid=uid)
+    except Product.DoesNotExist:
+        return HttpResponseBadRequest("Invalid product ID")  # Handle bad product ID
+
+    # Get or create cart for the logged-in user
+    cart, _ = Cart.objects.get_or_create(user=user, is_paid=False)
+
+    # Handle size variant if applicable
+    variant = request.GET.get('variant')
+    size_variant = None
+    if variant:
+        try:
+            size_variant = SizeVariant.objects.get(size_name=variant)
+        except SizeVariant.DoesNotExist:
+            return HttpResponseBadRequest("Invalid size variant")
+
+    # Handle color variant if applicable
+    color = request.GET.get('color')
+    color_variant = None
+    if color:
+        try:
+            color_variant = ColorVariant.objects.get(color_name=color)
+        except ColorVariant.DoesNotExist:
+            return HttpResponseBadRequest("Invalid color variant")
+
+    # Create cart item with size and color variants
+    cart_item = CartItems.objects.create(cart=cart, product=product, size_variant=size_variant, color_variant=color_variant)
+    cart_item.save()  # Ensure it's saved with all attributes
+
+    print(f"Added to Cart - Product: {product.uid}, Size: {variant}, Color: {color}")  # Debugging
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def remove_from_cart(request, cart_item_uid):
+    try:
+        cart_item = CartItems.objects.get(uid = cart_item_uid)
+        cart_item.delete()
+    except Exception as e:
+        print(f"Error removing from cart: {e}")
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
