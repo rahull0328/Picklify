@@ -36,3 +36,7 @@ def get_product(request, slug):
     except Exception as e:
         print(e)
         return HttpResponseNotFound("An error occurred while fetching the product.")
+
+def add_to_cart(request, slug):
+    product = Product.objects.get(slug=slug)
+    user = request.user
