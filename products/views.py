@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from products.models import Product
-from django.http import HttpResponseNotFound
+from django.http import HttpResponseNotFound, HttpResponseRedirect, HttpResponseBadRequest
+from django.contrib.auth.decorators import login_required
+from accounts.models import Cart, CartItems, SizeVariant, ColorVariant
 
 def get_random_products():
-    """Returns 3 random products"""
     return Product.objects.order_by('?')[:3]
 
 def get_product(request, slug):
@@ -19,7 +20,6 @@ def get_product(request, slug):
             price = product.get_product_size_by_size(size)  # Ensure this method exists in your model
             context['selected_size'] = size
             context['updated_price'] = price
-            print(price)
 
         # Handle color selection and filter products by color
         if request.GET.get('color'):
@@ -37,6 +37,43 @@ def get_product(request, slug):
         print(e)
         return HttpResponseNotFound("An error occurred while fetching the product.")
 
-def add_to_cart(request, slug):
-    product = Product.objects.get(slug=slug)
+@login_required  # Ensures only logged-in users can access this function
+def add_to_cart(request, uid):
     user = request.user
+
+    if not user.is_authenticated:  # Double-check for extra security
+        return redirect('login')  # Redirect to login page
+
+    try:
+        product = Product.objects.get(uid=uid)
+    except Product.DoesNotExist:
+        return HttpResponseBadRequest("Invalid product ID")  # Handle bad product ID
+
+    # Get or create cart for the logged-in user
+    cart, _ = Cart.objects.get_or_create(user=user, is_paid=False)
+
+    # Handle size variant if applicable
+    variant = request.GET.get('variant')
+    size_variant = None
+    if variant:
+        try:
+            size_variant = SizeVariant.objects.get(size_name=variant)
+        except SizeVariant.DoesNotExist:
+            return HttpResponseBadRequest("Invalid size variant")
+
+    # Handle color variant if applicable
+    color = request.GET.get('color')
+    color_variant = None
+    if color:
+        try:
+            color_variant = ColorVariant.objects.get(color_name=color)
+        except ColorVariant.DoesNotExist:
+            return HttpResponseBadRequest("Invalid color variant")
+
+    # Create cart item with size and color variants
+    cart_item = CartItems.objects.create(cart=cart, product=product, size_variant=size_variant, color_variant=color_variant)
+    cart_item.save()  # Ensure it's saved with all attributes
+
+    print(f"Added to Cart - Product: {product.uid}, Size: {variant}, Color: {color}")  # Debugging
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

@@ -17,7 +17,7 @@ class Profile(BaseModel):
 
 class Cart(BaseModel):
     user = models.ForeignKey(User , on_delete=models.CASCADE, related_name='carts')
-    is_padid = models.BooleanField(default=False)
+    is_paid = models.BooleanField(default=False)
 
 class CartItems(BaseModel):
     cart = models.ForeignKey(Cart , on_delete=models.CASCADE, related_name='cart_items')
