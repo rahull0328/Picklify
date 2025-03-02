@@ -124,7 +124,7 @@
                 <label for="color">Color:</label>
                 <div class="color_buttons">
                     {% for color in product.color_variant.all %}
-                        <input type="radio" id="{{ color.color_name|lower }}" name="color" value="{{ color.color_name }}" class="color_option">
+                        <input type="radio" id="{{ color.color_name|lower }}" name="color" value="{{ color.color_name }}" class="color_option" onchange="updateCartUrl()">
                         <label for="{{ color.color_name|lower }}" style="background-color: {{ color.color_name|lower }};"></label>
                     {% endfor %}
                 </div>
@@ -158,7 +158,7 @@
             </button>
           </div>
           <div class="card_area">
-            <a class="main_btn" href="#">Add to Cart</a>
+            <a class="main_btn" id="addToCartBtn" href="{% url 'add_to_cart' product.uid %}?variant={{selected_size}}&color={{ selected_color }}">Add to Cart</a>
             <a class="icon_btn" href="#">
               <i class="lnr lnr lnr-diamond"></i>
             </a>
@@ -602,6 +602,17 @@
         window.location.href = currentUrl.toString(); // Reload page with new color parameter
     });
   });
+
+  function updateCartUrl() {
+    let selectedColor = document.querySelector('input[name="color"]:checked');
+    let addToCartBtn = document.getElementById('addToCartBtn');
+
+    if (selectedColor) {
+        let currentUrl = addToCartBtn.href.split('?')[0];  // Get base URL
+        let variant = new URL(addToCartBtn.href).searchParams.get("variant"); // Get variant from existing URL
+        addToCartBtn.href = `${currentUrl}?variant=${variant}&color=${selectedColor.value}`;
+    }
+  }
 </script>
 
 {% endblock %}
