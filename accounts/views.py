@@ -114,13 +114,11 @@ def add_to_cart(request, uid):
     cart_item = CartItems.objects.create(cart=cart, product=product, size_variant=size_variant, color_variant=color_variant)
     cart_item.save()  # Ensure it's saved with all attributes
 
-    print(f"Added to Cart - Product: {product.uid}, Size: {variant}, Color: {color}")  # Debugging
-
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def remove_from_cart(request, cart_item_uid):
     try:
-        cart_item = CartItems.objects.get(uid = cart_item_uid)
+        cart_item = CartItems.objects.get(uid =cart_item_uid)
         cart_item.delete()
     except Exception as e:
         print(f"Error removing from cart: {e}")
