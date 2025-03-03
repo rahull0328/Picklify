@@ -16,8 +16,8 @@
               <p>Very us move be blessed multiply night</p>
             </div>
             <div class="page_link">
-              <a href="index.html">Home</a>
-              <a href="cart.html">Cart</a>
+              <a href="{% url "index" %}">Home</a>
+              <a href="{% url "cart" %}">Cart</a>
             </div>
           </div>
         </div>
@@ -41,36 +41,36 @@
                 </tr>
               </thead>
               <tbody>
+                
+                {% for item in cart_items %}
                 <tr>
-                  <td>
-                    <div class="d-flex align-items-center">
-                      <img src="{% static 'img/product/single-product/cart-1.jpg' %}" alt="" class="img-thumbnail me-3" style="width: 90px; height: 90px;">
-                      &nbsp;&nbsp;<p class="mb-0">Minimalistic shop for multipurpose use</p>
-                    </div>
-                  </td>
-                  <td>
-                    <h5 class="fw-bold">$360.00</h5>
-                  </td>
-                  <td>
-                    <div class="input-group quantity-input">
-                      <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity(-1)">-</button>
-                      <input type="text" class="form-control text-center" name="qty" id="sst" value="1" readonly>
-                      <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity(1)">+</button>
-                    </div>
-                  </td>
-                  <td>
-                    <h5 class="fw-bold">$720.00</h5>
-                  </td>
-                  <td>
-                    <a href="{% url "remove_from_cart" cart_items.uid  %}" class="text-primary me-2">
-                      <i class="ti-trash icon-large" aria-hidden="true"></i>
-                    </a>
-                    &nbsp;&nbsp;
-                    <a href="#" class="text-danger">
-                      <i class="ti-heart icon-large" aria-hidden="true"></i>
-                    </a>
-                  </td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <img src="/media/{{image.image}}" alt="" class="img-thumbnail me-3" style="width: 90px; height: 90px;">
+                            &nbsp;&nbsp;<p class="mb-0">{{ item.product.product_name }}</p>
+                        </div>
+                    </td>
+                    <td>
+                        <h5 class="fw-bold">₹&nbsp;{{ item.product.price }}</h5>
+                    </td>
+                    <td>
+                        <div class="input-group quantity-input">
+                          <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity(-1, '{{ item.uid }}')">-</button>
+                          <input type="text" class="form-control text-center" name="qty" id="quantity-{{ item.uid }}" value="{{ item.quantity }}" readonly>
+                          <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity(1, '{{ item.uid }}')">+</button>
+                        </div>
+                    </td>
+                    <td>
+                        <h5 class="fw-bold">${{ item.price }}</h5>
+                    </td>
+                    <td>
+                        <a href="{% url 'remove_from_cart' item.uid %}" class="text-primary me-2">
+                            <i class="ti-trash icon-large" aria-hidden="true"></i>
+                        </a>
+                    </td>
                 </tr>
+                {% endfor %}
+
                 <tr class="border-top">
                   <td colspan="2">
                     <a class="btn btn-outline-secondary btn-sm" href="#">Update Cart</a>
