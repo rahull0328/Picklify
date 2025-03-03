@@ -75,18 +75,17 @@ def activate_email(request, email_token):
     
 def cart(request):
     cart_items = CartItems.objects.filter(cart__user=request.user, cart__is_paid=False)
-    print(f"Cart items: {cart_items}")  # Debugging output
     context = {'cart_items': cart_items}
 
 
     return render(request, 'cart/cart.html', context)
 
-@login_required  # Ensures only logged-in users can access this function
+@login_required
 def add_to_cart(request, uid):
     user = request.user
 
-    if not user.is_authenticated:  # Double-check for extra security
-        return redirect('login')  # Redirect to login page
+    if not user.is_authenticated:
+        return redirect('accounts/login.html')  # Redirect to login page
 
     try:
         product = Product.objects.get(uid=uid)
@@ -116,14 +115,20 @@ def add_to_cart(request, uid):
 
     # Create cart item with size and color variants
     cart_item = CartItems.objects.create(cart=cart, product=product, size_variant=size_variant, color_variant=color_variant)
-    cart_item.save()  # Ensure it's saved with all attributes
+    cart_item.save()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+@login_required
 def remove_from_cart(request, cart_item_uid):
+    user = request.user
+
+    if not user.is_authenticated:
+        return redirect('accounts/login.html')  # Redirect to login page
+    
     try:
         cart_item = CartItems.objects.get(uid =cart_item_uid)
         cart_item.delete()
     except Exception as e:
         print(f"Error removing from cart: {e}")
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

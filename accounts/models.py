@@ -19,7 +19,6 @@ class Profile(BaseModel):
         count = CartItems.objects.filter(cart__is_paid=False, cart__user=self.user).count()
         return count
 
-        
 class Cart(BaseModel):
     user = models.ForeignKey(User , on_delete=models.CASCADE, related_name='carts')
     is_paid = models.BooleanField(default=False)
