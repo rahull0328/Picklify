@@ -74,11 +74,16 @@ def activate_email(request, email_token):
         return HttpResponse('Invalid Email Token !')    
     
 def cart(request):
-    cart_items = CartItems.objects.filter(cart__user=request.user, cart__is_paid=False)
-    context = {'cart_items': cart_items}
+    cart = Cart.objects.filter(user=request.user, is_paid=False).first()
+    cart_items = CartItems.objects.filter(cart=cart)
 
+    context = {
+        'cart': cart,
+        'cart_items': cart_items
+    }
 
     return render(request, 'cart/cart.html', context)
+
 
 @login_required
 def add_to_cart(request, uid):
