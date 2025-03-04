@@ -46,7 +46,7 @@
                 <tr>
                     <td>
                         <div class="d-flex align-items-center">
-                          <img src="{{ item. }}" alt="{{ item.product.product_name }}" class="img-thumbnail me-3" style="width: 100px; height: 100px;">
+                          <img src="{{ item.product.product_images.first.image.url }}" alt="{{ item.product.product_name }}" class="img-thumbnail me-3" style="width: 100px; height: 100px;">
                             &nbsp;&nbsp;<p class="mb-0">{{ item.product.product_name }}</p>
                         </div>
                     </td>
@@ -65,11 +65,11 @@
                     </td>
                     <td>
                         <a href="{% url 'remove_from_cart' item.uid %}" class="text-primary me-2">
-                            <i class="ti-trash icon-large" aria-hidden="true"></i>
+                          <i class="ti-trash icon-large" aria-hidden="true"></i>
                         </a>
-                    </td>
-                </tr>
-                
+                      </td>
+                    </tr>
+                    {% endfor %}
                 <tr class="border-top">
                   <td colspan="2">
                     <a class="btn btn-outline-secondary btn-sm" href="#">Update Cart</a>
@@ -91,7 +91,6 @@
                     </div>
                   </td>
                 </tr>
-                {% endfor %}
               </tbody>
             </table>            
           </div>
