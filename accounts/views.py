@@ -81,7 +81,14 @@ def cart(request):
         'cart': cart,
         'cart_items': cart_items
     }
-
+    
+    if request.method == 'POST':
+        coupon = request.POST.get('coupon')
+        coupon_obj = Coupon.objects.filter(coupon_code__icontains = coupon)
+        if not coupon_obj.exists():
+            messages.warning(request, 'Invalid Coupon Code!')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        
     return render(request, 'cart/cart.html', context)
 
 
