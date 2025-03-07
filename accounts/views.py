@@ -75,20 +75,40 @@ def activate_email(request, email_token):
     
 def cart(request):
     cart = Cart.objects.filter(user=request.user, is_paid=False).first()
+    
+    if not cart:
+        messages.warning(request, "Your cart is empty.")
+        return redirect("home")  # Redirect to a relevant page
+
     cart_items = CartItems.objects.filter(cart=cart)
+
+    if request.method == 'POST':
+        coupon_code = request.POST.get('coupon')
+        coupon_obj = Coupon.objects.filter(coupon_code__iexact=coupon_code).first()  # Get first matching coupon
+
+        if not coupon_obj:
+            messages.warning(request, 'Invalid Coupon Code!')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+        if cart.coupon:
+            messages.warning(request, 'A coupon is already applied to your cart.')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+        # Check if the coupon is still valid (if applicable)
+        if hasattr(coupon_obj, 'is_expired') and not coupon_obj.is_expired:
+            messages.warning(request, "This coupon is no longer valid.")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+        # Apply the coupon
+        cart.coupon = coupon_obj
+        cart.save()
+        messages.success(request, 'Coupon Applied Successfully!')
 
     context = {
         'cart': cart,
         'cart_items': cart_items
     }
-    
-    if request.method == 'POST':
-        coupon = request.POST.get('coupon')
-        coupon_obj = Coupon.objects.filter(coupon_code__icontains = coupon)
-        if not coupon_obj.exists():
-            messages.warning(request, 'Invalid Coupon Code!')
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-        
+
     return render(request, 'cart/cart.html', context)
 
 
