@@ -88,30 +88,38 @@
                   </td>
                 </tr>
                 
-                <!-- Coupon Code Input -->
-                <tr>
-                  <td colspan="3"></td>
-                  <td colspan="2">
-                    <form method="POST" action="" class="d-flex justify-content-end gap-2">
-                      {% include "base/alert.html" %}
-                      {% csrf_token %}
-                      <input type="text" name="coupon" class="form-control w-50" placeholder="Enter Coupon Code" required>
-                      &nbsp;
-                      <button type="submit" class="btn btn-primary">Apply</button>
-                    </form>
-                  </td>
-                </tr>
-                
-                <tr>
-                  <td colspan="3"></td>
-                  <td colspan="2">
-                    <div class="d-flex justify-content-end gap-2">
-                      <a class="btn btn-outline-primary" href="#">Continue Shopping</a>
-                      &nbsp;
-                      <a class="btn btn-primary" href="#">Proceed to Checkout</a>
+              <!-- Coupon Code Input Row -->
+              <tr>
+                <td colspan="3"></td>
+                <td colspan="2">
+                    <!-- Alert Box inside a div matching the form width -->
+                    <div class="w-100">
+                        {% include "base/alert.html" %}
                     </div>
-                  </td>
-                </tr>
+
+                    <!-- Coupon Form with proper spacing -->
+                    <form method="POST" action="" class="d-flex justify-content-end align-items-center gap-2 mt-2">
+                        {% csrf_token %}
+                        <input type="text" name="coupon" class="form-control" placeholder="Enter Coupon Code" required>
+                        <button type="submit" class="btn btn-success">Apply</button>
+                    </form>
+                </td>
+              </tr>
+
+              <!-- Action Buttons Row -->
+              <tr>
+                <td colspan="3"></td>
+                <td colspan="2">
+                    <div class="d-flex justify-content-between">
+                        <!-- Left-aligned Continue Shopping button -->
+                        <a class="btn btn-outline-primary" href="#">Continue Shopping</a>
+                        
+                        <!-- Right-aligned Proceed to Checkout button -->
+                        <a class="btn btn-primary" href="#">Proceed to Checkout</a>
+                    </div>
+                </td>
+              </tr>
+
               </tbody>
             </table>            
           </div>
