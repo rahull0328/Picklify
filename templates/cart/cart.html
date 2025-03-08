@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %} {% load static %} {% block content %}
 <style>
   .icon-large {
-    font-size: 24px; /* Adjust as needed */
+    font-size: 24px;
   }
 </style>  
     <!--================Home Banner Area =================-->
@@ -47,8 +47,8 @@
                 <tr>
                     <td>
                         <div class="d-flex align-items-center">
-                          <img src="{{ item.product.product_images.first.image.url }}" alt="{{ item.product.product_name }}" class="img-thumbnail me-3" style="width: 100px; height: 100px;">
-                            &nbsp;&nbsp;<p class="mb-0">{{ item.product.product_name }}</p>
+                          <img src="{{ item.product.product_images.first.image.url }}" alt="{{ item.product.product_name }}" class="img-thumbnail me-3" style="width: 100px; height: 110px;">
+                            &nbsp;&nbsp;<p class="mb-0 fw-bold">{{ item.product.product_name }}</p>
                         </div>
                     </td>
                     <td>
@@ -103,6 +103,12 @@
                         <input type="text" name="coupon" class="form-control" placeholder="Enter Coupon Code" required>
                         <button type="submit" class="btn btn-success">Apply</button>
                     </form>
+                    <br/>
+                    <div class="w-40">
+                      <p>Available Coupons To Apply:</p>
+                      <a href="" class="btn btn-success">{{ cart.coupon.coupon_code }}</a>
+                    </div>
+
                 </td>
               </tr>
 
