@@ -95,10 +95,14 @@ def cart(request):
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
         # Check if the coupon is still valid (if applicable)
-        if hasattr(coupon_obj, 'is_expired') and not coupon_obj.is_expired:
-            messages.warning(request, "This coupon is no longer valid.")
+        if coupon_obj.is_expired:
+            messages.warning(request, "Coupon is Expired!.")
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+        if cart.get_cart_total() < coupon_obj.minimum_amount:
+            messages.warning(request, f'Cart Value Should Be Greater than {coupon_obj.minimum_amount}!')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        
         # Apply the coupon
         cart.coupon = coupon_obj
         cart.save()
@@ -106,8 +110,10 @@ def cart(request):
 
     context = {
         'cart': cart,
-        'cart_items': cart_items
+        'cart_items': cart_items,
+        'coupon': cart.coupon  # Include the coupon in the context
     }
+
 
     return render(request, 'cart/cart.html', context)
 
