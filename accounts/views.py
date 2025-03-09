@@ -111,12 +111,18 @@ def cart(request):
     context = {
         'cart': cart,
         'cart_items': cart_items,
-        'coupon': cart.coupon  # Include the coupon in the context
+        'coupon': cart.coupon
     }
 
 
     return render(request, 'cart/cart.html', context)
 
+def remove_coupon(request, cart_id):
+    cart = Cart.objects.get(uid=cart_id)
+    cart.coupon = None
+    cart.save()
+    messages.success(request, 'Coupon Removed Successfully!')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @login_required
 def add_to_cart(request, uid):
@@ -170,3 +176,6 @@ def remove_from_cart(request, cart_item_uid):
     except Exception as e:
         print(f"Error removing from cart: {e}")
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def contact_page(request ):
+    return render(request, 'contact/contact.html')
