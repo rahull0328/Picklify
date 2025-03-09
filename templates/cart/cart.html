@@ -105,8 +105,10 @@
                     </form>
                     <br/>
                     <div class="w-40">
-                      <p>Available Coupons To Apply:</p>
-                      <a href="" class="btn btn-success">{{ cart.coupon.coupon_code }}</a>
+                      {% if cart.coupon %}
+                        <p>Applied Coupons:</p>
+                        <a href="{% url "remove_coupon" cart.uid %}" class="btn btn-success">{{ cart.coupon.coupon_code }}</a>
+                      {% endif %}
                     </div>
 
                 </td>
