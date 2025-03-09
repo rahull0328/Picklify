@@ -7,10 +7,11 @@ from django.shortcuts import render, redirect
 from .models import Profile
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
-from accounts.models import Cart, CartItems, SizeVariant, ColorVariant
+from accounts.models import Cart, CartItems, SizeVariant, ColorVariant, ContactMessage
 from products.models import *
+import logging
 
-# Create your views here.
+logger = logging.getLogger(__name__)
 
 def login_page(request):
     if request.method == 'POST':
@@ -177,5 +178,23 @@ def remove_from_cart(request, cart_item_uid):
         print(f"Error removing from cart: {e}")
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-def contact_page(request ):
+def contact_page(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+
+        # Create a new contact message object
+        try:
+            contact_obj = ContactMessage.objects.create(name=name, email=email, subject=subject, message=message)
+            contact_obj.save()
+            messages.success(request, "Your message has been sent successfully!")
+        except Exception as e:
+            logger.error(f"Error saving contact message: {e}")  # Logs the actual error
+            messages.warning(request, f"Error: {e}")  # Show exact error (only for debugging)
+            return HttpResponseRedirect(request.path_info)
+
+        return HttpResponseRedirect(request.path_info)
+
     return render(request, 'contact/contact.html')

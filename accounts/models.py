@@ -7,8 +7,6 @@ import uuid
 from base.email import send_account_activation_email
 from products.models import Product, ColorVariant, SizeVariant, Coupon
 
-# Create your models here.
-
 class Profile(BaseModel):
     user = models.OneToOneField(User , on_delete=models.CASCADE , related_name="profile")
     is_email_verified = models.BooleanField(default=False)
@@ -71,3 +69,11 @@ def  send_email_token(sender , instance , created , **kwargs):
 
     except Exception as e:
         print(e)
+
+class ContactMessage(models.Model):
+    uid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)  # Remove unique=True for now
+    name = models.CharField(max_length=255)
+    email = models.EmailField()
+    subject = models.CharField(max_length=255)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
