@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Receipt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        h1, h2 {
+            margin: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: left;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+    <h1>Invoice Receipt</h1>
+    <p><strong>Invoice Number:</strong> {{ data.id }}</p>
+
+    <h2>Service Provider</h2>
+    <p><strong>Django Ecommerce</strong><br>
+       1001A, The Capital B Wing, 10th Floor, Bandra Kurla Complex, Bandra (E), Mumbai<br>
+       Contact: 9876543210</p>
+
+    <p><strong>Order Date:</strong> {{ data.order_date }}</p>
+    <p><strong>Customer Name:</strong> {{ data.name }}</p>
+    <p><strong>Address:</strong> {{ data.address }}</p>
+
+    <table>
+        <tr>
+            <th>Description</th>
+            <th>Bill Amount</th>
+            <th>Payment Method</th>
+        </tr>
+        <tr>
+            <td>{{ data.description }}</td>
+            <td>{{ data.amount }}</td>
+            <td>{{ data.pay_method }}</td>
+        </tr>
+    </table>
+
+    <p><strong>Please Note:</strong></p>
+    <p>Dear Consumer, the bill payment will reflect in the next 48 hours in your account. Please contact our customer support for any queries regarding this order.</p>
+
+    <p><strong>Thank you for using our service</strong></p>
+
+    <p class="footer">(This is a computer-generated receipt and does not require a physical signature.)</p>
+</body>
+</html>
