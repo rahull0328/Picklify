@@ -6,7 +6,6 @@ from django.conf import settings
 
 def save_pdf(params: dict):
     try:
-        # Load the HTML template
         template = get_template('receipt/invoice.html')
         html = template.render(params)
 
@@ -16,11 +15,10 @@ def save_pdf(params: dict):
         # Generate PDF
         pdf = pisa.pisaDocument(BytesIO(html.encode('UTF-8')), result)
 
-        # If an error occurs, return failure
         if pdf.err:
             return '', False
 
-        # Generate a unique file name
+        # Generating a unique file name
         file_name = f"{uuid.uuid4()}.pdf"
         file_path = str(settings.BASE_DIR) + f"/public/static/{file_name}.pdf"
 
