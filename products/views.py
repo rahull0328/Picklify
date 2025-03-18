@@ -35,3 +35,7 @@ def get_product(request, slug):
     except Exception as e:
         print(e)
         return HttpResponseNotFound("An error occurred while fetching the product.")
+
+def get_category(request):
+    return render(request, 'product/category.html')
+        
