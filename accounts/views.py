@@ -74,18 +74,32 @@ def activate_email(request, email_token):
     except Exception as e:
         return HttpResponse('Invalid Email Token !')    
     
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.http import HttpResponseRedirect
+
 def cart(request):
-    cart = Cart.objects.filter(user=request.user, is_paid=False).first()
-    
-    if not cart:
-        messages.warning(request, "Your cart is empty.")
-        return redirect("home")  # Redirect to a relevant page
+    cart = None
+    cart_items = []
 
-    cart_items = CartItems.objects.filter(cart=cart)
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user, is_paid=False).first()
 
+        if cart:
+            cart_items = CartItems.objects.filter(cart=cart)
+        else:
+            messages.warning(request, "Your cart is empty.")
+    else:
+        messages.warning(request, "Please log in to view your cart.")
+
+    # Handle coupon only if user is logged in and cart exists
     if request.method == 'POST':
+        if not request.user.is_authenticated or not cart:
+            messages.warning(request, "You must be logged in to apply a coupon.")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
         coupon_code = request.POST.get('coupon')
-        coupon_obj = Coupon.objects.filter(coupon_code__iexact=coupon_code).first()  # Get first matching coupon
+        coupon_obj = Coupon.objects.filter(coupon_code__iexact=coupon_code).first()
 
         if not coupon_obj:
             messages.warning(request, 'Invalid Coupon Code!')
@@ -95,7 +109,6 @@ def cart(request):
             messages.warning(request, 'A coupon is already applied to your cart.')
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-        # Check if the coupon is still valid (if applicable)
         if coupon_obj.is_expired:
             messages.warning(request, "Coupon is Expired!.")
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -103,7 +116,7 @@ def cart(request):
         if cart.get_cart_total() < coupon_obj.minimum_amount:
             messages.warning(request, f'Cart Value Should Be Greater than {coupon_obj.minimum_amount}!')
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-        
+
         # Apply the coupon
         cart.coupon = coupon_obj
         cart.save()
@@ -112,11 +125,11 @@ def cart(request):
     context = {
         'cart': cart,
         'cart_items': cart_items,
-        'coupon': cart.coupon
+        'coupon': cart.coupon if cart else None
     }
 
-
     return render(request, 'cart/cart.html', context)
+
 
 def remove_coupon(request, cart_id):
     cart = Cart.objects.get(uid=cart_id)

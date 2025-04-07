@@ -1,138 +1,135 @@
-{% extends 'base/base.html' %} {% load static %} {% block content %}
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
 <style>
   .icon-large {
     font-size: 24px;
   }
 </style>  
-    <!--================Home Banner Area =================-->
-    <section class="banner_area">
-      <div class="banner_inner d-flex align-items-center">
-        <div class="container">
-          <div
-            class="banner_content d-md-flex justify-content-between align-items-center"
-          >
-            <div class="mb-3 mb-md-0">
-              <h2>Cart</h2>
-              <p>Very us move be blessed multiply night</p>
-            </div>
-            <div class="page_link">
-              <a href="{% url "index" %}">Home</a>
-              <a href="{% url "cart" %}">Cart</a>
-            </div>
-          </div>
+
+<section class="banner_area">
+  <div class="banner_inner d-flex align-items-center">
+    <div class="container">
+      <div class="banner_content d-md-flex justify-content-between align-items-center">
+        <div class="mb-3 mb-md-0">
+          <h2>Cart</h2>
+          <p>Very us move be blessed multiply night</p>
+        </div>
+        <div class="page_link">
+          <a href="{% url "index" %}">Home</a>
+          <a href="{% url "cart" %}">Cart</a>
         </div>
       </div>
+    </div>
   </div>
-    </section>
-    <!--================End Home Banner Area =================-->
+</section>
 
-    <!--================Cart Area =================-->
-    <section class="cart_area">
-      <div class="container">
-        <div class="cart_inner">
-          <div class="table-responsive">
-            <table class="table table-hover align-middle text-center">
-              <thead class="table-dark">
-                <tr>
-                  <th scope="col">Product</th>
-                  <th scope="col">Price</th>
-                  <th scope="col">Quantity</th>
-                  <th scope="col">Total</th>
-                  <th scope="col">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                
-                {% for item in cart_items %}
-                <tr>
-                    <td>
-                        <div class="d-flex align-items-center">
-                          <img src="{{ item.product.product_images.first.image.url }}" alt="{{ item.product.product_name }}" class="img-thumbnail me-3" style="width: 100px; height: 110px;">
-                            &nbsp;&nbsp;<p class="mb-0 fw-bold">{{ item.product.product_name }}</p>
-                        </div>
-                    </td>
-                    <td>
-                        <h5 class="fw-bold">₹&nbsp;{{ item.get_product_price }}</h5>
-                    </td>
-                    <td>
-                        <div class="input-group quantity-input">
-                          <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity(-1)">-</button>
-                          <input type="text" class="form-control text-center" name="qty" id="" value="{{ item.quantity }}" readonly>
-                          <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity(1)">+</button>
-                        </div>
-                    </td>
-                    <td>
-                        <h5 class="fw-bold" id="total-{{ item.uid }}">₹&nbsp;{{ item.get_product_price }}</h5>
-                    </td>
-                    <td>
-                        <a href="{% url 'remove_from_cart' item.uid %}" class="text-primary me-2">
-                          <i class="ti-trash icon-large" aria-hidden="true"></i>
-                        </a>
-                    </td>
-                    </tr>
-                    {% endfor %}
-                <tr class="border-top">
-                  <td colspan="2">
-                    <a class="btn btn-outline-secondary btn-sm" href="#">Update Cart</a>
-                  </td>
-                  <td></td>
-                  <td>
-                    <h5 class="fw-bold">Subtotal</h5>
-                  </td>
-                  <td>
-                    {% if cart  %}
-                      <h5 class="fw-bold" id="subtotal">₹&nbsp;{{cart.get_cart_total}}</h5>
-                    {% else %}
-                      <h5 class="fw-bold" id="subtotal">₹&nbsp;0</h5>
-                    {% endif %}
-                  </td>
-                </tr>
-                
-              <!-- Coupon Code Input Row -->
-              <tr>
-                <td colspan="3"></td>
-                <td colspan="2">
-                    <!-- Alert Box inside a div matching the form width -->
-                    <div class="w-100">
-                        {% include "base/alert.html" %}
-                    </div>
-
-                    <!-- Coupon Form with proper spacing -->
-                    <form method="POST" action="" class="d-flex justify-content-end align-items-center gap-2 mt-2">
-                        {% csrf_token %}
-                        <input type="text" name="coupon" class="form-control" placeholder="Enter Coupon Code" required>
-                        <button type="submit" class="btn btn-success">Apply</button>
-                    </form>
-                    <br/>
-                    <div class="w-40">
-                      {% if cart.coupon %}
-                        <p>Applied Coupons:</p>
-                        <a href="{% url "remove_coupon" cart.uid %}" class="btn btn-success">{{ cart.coupon.coupon_code }}</a>
-                      {% endif %}
-                    </div>
-
-                </td>
-              </tr>
-
-              <!-- Action Buttons Row -->
-              <tr>
-                <td colspan="3"></td>
-                <td colspan="2">
-                    <div class="d-flex justify-content-between">
-                        <!-- Left-aligned Continue Shopping button -->
-                        <a class="btn btn-outline-primary" href="#">Continue Shopping</a>
-                        
-                        <!-- Right-aligned Proceed to Checkout button -->
-                        <a class="btn btn-primary" href="#">Proceed to Checkout</a>
-                    </div>
-                </td>
-              </tr>
-
-              </tbody>
-            </table>            
+<section class="cart_area">
+  <div class="container">
+    <div class="cart_inner">
+      <div class="table-responsive">
+        <!-- Alert Box -->
+        {% include "base/alert.html" %}
+        
+        {% if not user.is_authenticated %}
+          <div class="alert alert-warning text-center">
+            Please <a href="{% url 'login' %}">log in</a> to view your cart.
           </div>
-        </div>
+        {% endif %}
+
+        {% if cart and cart_items %}
+        <table class="table table-hover align-middle text-center">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">Product</th>
+              <th scope="col">Price</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Total</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in cart_items %}
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <img src="{{ item.product.product_images.first.image.url }}" alt="{{ item.product.product_name }}" class="img-thumbnail me-3" style="width: 100px; height: 110px;">
+                  &nbsp;&nbsp;<p class="mb-0 fw-bold">{{ item.product.product_name }}</p>
+                </div>
+              </td>
+              <td>
+                <h5 class="fw-bold">₹&nbsp;{{ item.get_product_price }}</h5>
+              </td>
+              <td>
+                <div class="input-group quantity-input">
+                  <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity(-1)">-</button>
+                  <input type="text" class="form-control text-center" name="qty" value="{{ item.quantity }}" readonly>
+                  <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity(1)">+</button>
+                </div>
+              </td>
+              <td>
+                <h5 class="fw-bold" id="total-{{ item.uid }}">₹&nbsp;{{ item.get_product_price }}</h5>
+              </td>
+              <td>
+                <a href="{% url 'remove_from_cart' item.uid %}" class="text-primary me-2">
+                  <i class="ti-trash icon-large" aria-hidden="true"></i>
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+
+            <tr class="border-top">
+              <td colspan="2">
+                <a class="btn btn-outline-secondary btn-sm" href="#">Update Cart</a>
+              </td>
+              <td></td>
+              <td>
+                <h5 class="fw-bold">Subtotal</h5>
+              </td>
+              <td>
+                <h5 class="fw-bold" id="subtotal">₹&nbsp;{{ cart.get_cart_total }}</h5>
+              </td>
+            </tr>
+
+            <!-- Coupon Row -->
+            <tr>
+              <td colspan="3"></td>
+              <td colspan="2">
+                <form method="POST" action="" class="d-flex justify-content-end align-items-center gap-2 mt-2">
+                  {% csrf_token %}
+                  <input type="text" name="coupon" class="form-control" placeholder="Enter Coupon Code" required>
+                  <button type="submit" class="btn btn-success">Apply</button>
+                </form>
+                <br/>
+                <div class="w-40">
+                  {% if cart.coupon %}
+                  <p>Applied Coupons:</p>
+                  <a href="{% url "remove_coupon" cart.uid %}" class="btn btn-success">{{ cart.coupon.coupon_code }}</a>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td colspan="3"></td>
+              <td colspan="2">
+                <div class="d-flex justify-content-between">
+                  <a class="btn btn-outline-primary" href="{% url 'index' %}">Continue Shopping</a>
+                  <a class="btn btn-primary" href="#">Proceed to Checkout</a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        {% else %}
+          <div class="text-center mt-4">
+            <h5>Your cart is empty.</h5>
+            <a class="btn btn-outline-primary mt-3" href="{% url 'index' %}">Continue Shopping</a>
+          </div>
+        {% endif %}
       </div>
-    </section>
-    <!--================End Cart Area =================-->
+    </div>
+  </div>
+</section>
+
 {% endblock %}
