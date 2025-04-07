@@ -198,3 +198,9 @@ def contact_page(request):
         return HttpResponseRedirect(request.path_info)
 
     return render(request, 'contact/contact.html')
+
+@login_required
+def logout_view(request):
+    logout(request)
+    messages.success(request, "You have been logged out successfully.")
+    return redirect('/')

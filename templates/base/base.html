@@ -154,9 +154,15 @@
                 
 
                   <li class="nav-item">
-                    <a href="{% url "register" %}" class="icons">
-                      <i class="ti-user" aria-hidden="true"></i>
-                    </a>
+                    {% if request.user.is_authenticated %}
+                      <a href="{% url 'logout' %}" class="icons" title="Logout">
+                        <i class="ti-power-off" aria-hidden="true"></i>
+                      </a>
+                    {% else %}
+                      <a href="{% url 'register' %}" class="icons">
+                        <i class="ti-user" aria-hidden="true"></i>
+                      </a>
+                    {% endif %}
                   </li>
 
                   <li class="nav-item">
