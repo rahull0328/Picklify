@@ -1,7 +1,33 @@
-{% extends 'base/base.html' %} {% load static %} {% block content %}
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+  .section-title {
+    font-size: 30px;
+    font-weight: 700;
+    color: #71cd14;
+    text-transform: uppercase;
+  }
+</style>
+
 <!--================Category Product Area =================-->
 <section class="cat_product_area section_gap">
   <div class="container">
+
+    <!-- Centralized Page Heading -->
+    <div class="row mb-4">
+      <div class="col-12 text-center">
+        <h2 class="section-title">
+          {% if selected_category %}
+            {{ selected_category.category_name }} Collection
+          {% else %}
+            Explore Our Latest Products
+          {% endif %}
+        </h2>
+      </div>
+    </div>
+
     <div class="row">
       <!-- Sidebar Category List -->
       <div class="col-lg-3">
@@ -12,14 +38,21 @@
             </div>
             <div class="widgets_inner">
               <ul class="list">
-                {% for category in categories %} {% if category.slug %}
                 <li>
-                  <a href="{% url 'category_products' category.slug %}">
-                    {{ category.category_name }}
+                  <a href="{% url 'product_list' %}" {% if not selected_category %}class="active"{% endif %}>
+                    All Products
                   </a>
                 </li>
-                {% endif %} {% empty %}
-                <li>No categories found.</li>
+                {% for category in categories %}
+                  {% if category.slug %}
+                    <li>
+                      <a href="{% url 'category_products' category.slug %}" {% if selected_category and category.slug == selected_category.slug %}class="active"{% endif %}>
+                        {{ category.category_name }}
+                      </a>
+                    </li>
+                  {% endif %}
+                {% empty %}
+                  <li>No categories found.</li>
                 {% endfor %}
               </ul>
             </div>
@@ -34,24 +67,20 @@
           <div class="col-lg-4 col-md-6">
             <div class="single-product">
               <div class="product-img">
-                {% with product.product_images.first as image %} {% if image %}
-                <img
-                  class="card-img"
-                  src="{{ image.image.url }}"
-                  alt="{{ product.product_name }}"
-                />
-                {% else %}
-                <img
-                  class="card-img"
-                  src="{% static 'img/no-image.jpg' %}"
-                  alt="No Image"
-                />
-                {% endif %} {% endwith %}
+                {% with product.product_images.first as image %}
+                  {% if image %}
+                    <img class="card-img" src="{{ image.image.url }}" alt="{{ product.product_name }}" />
+                  {% else %}
+                    <img class="card-img" src="{% static 'img/no-image.jpg' %}" alt="No Image" />
+                  {% endif %}
+                {% endwith %}
 
                 <div class="p_icon">
                   <a href="#"><i class="ti-eye"></i></a>
                   <a href="#"><i class="ti-heart"></i></a>
-                  <a href="{% url 'add_to_cart' product.uid %}?variant={{selected_size}}&color={{ selected_color }}"><i class="ti-shopping-cart"></i></a>
+                  <a href="{% url 'add_to_cart' product.uid %}?variant={{ selected_size|default:'' }}&color={{ selected_color|default:'' }}">
+                    <i class="ti-shopping-cart"></i>
+                  </a>
                 </div>
               </div>
               <div class="product-btm">
@@ -66,7 +95,7 @@
           </div>
           {% empty %}
           <div class="col-12">
-            <p>No products available in this category.</p>
+            <p>No products available{% if selected_category %} in this category{% endif %}.</p>
           </div>
           {% endfor %}
         </div>
