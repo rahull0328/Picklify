@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
-from products.models import Product
+from django.shortcuts import render, get_object_or_404
+from products.models import Product, Category
 from django.http import HttpResponseNotFound
 
 def get_random_products():
@@ -16,7 +16,7 @@ def get_product(request, slug):
         # Handle size selection and update price
         if request.GET.get('size'):
             size = request.GET.get('size').strip('"')
-            price = product.get_product_size_by_size(size)  # Ensure this method exists in your model
+            price = product.get_product_size_by_size(size)
             context['selected_size'] = size
             context['updated_price'] = price
 
@@ -28,14 +28,23 @@ def get_product(request, slug):
             context['similar_products'] = similar_products  # List of products with the selected color
 
         return render(request, 'product/product.html', context)
-
-    except Product.DoesNotExist:
-        return HttpResponseNotFound("Product not found")
     
     except Exception as e:
         print(e)
         return HttpResponseNotFound("An error occurred while fetching the product.")
 
-def get_category(request):
-    return render(request, 'product/category.html')
+def view_categories(request):
+    categories = Category.objects.all()
+    return render(request, 'product/category.html', {'categories': categories})
+
+def category_products(request, category_id):
+    selected_category = get_object_or_404(Category, id=category_id)
+    categories = Category.objects.all()
+    products = Product.objects.filter(category=selected_category)
+
+    return render(request, 'your_template.html', {
+        'categories': categories,
+        'products': products,
+        'selected_category': selected_category,
+    })
         
