@@ -37,21 +37,18 @@ def view_categories(request):
     categories = Category.objects.all()
     return render(request, 'product/category.html', {'categories': categories})
 
-def category_products(request, slug):
-    selected_category = get_object_or_404(Category, slug=slug)
+def product_list_or_category(request, slug=None):
     categories = Category.objects.all()
-    products = Product.objects.filter(category=selected_category)
+
+    if slug:
+        selected_category = get_object_or_404(Category, slug=slug)
+        products = Product.objects.filter(category=selected_category)
+    else:
+        selected_category = None
+        products = Product.objects.all()
 
     return render(request, 'product/category.html', {
         'categories': categories,
         'products': products,
         'selected_category': selected_category,
-    })
-
-def category_list(request):
-    categories = Category.objects.all()
-    products = Product.objects.all()
-    return render(request, 'product/category.html', {
-        'categories': categories,
-        'products': products
     })
