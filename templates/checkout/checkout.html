@@ -1,0 +1,160 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+<!--================Home Banner Area =================-->
+<section class="banner_area">
+  <div class="banner_inner d-flex align-items-center">
+    <div class="container">
+      <div class="banner_content d-md-flex justify-content-between align-items-center">
+        <div class="mb-3 mb-md-0">
+          <h2>Product Checkout</h2>
+          <p>Very us move be blessed multiply night</p>
+        </div>
+        <div class="page_link">
+          <a href="{% url "index" %}">Home</a>
+          <a href="{% url "checkout" %}">Product Checkout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--================End Home Banner Area =================-->
+
+<!--================Checkout Area =================-->
+<section class="checkout_area section_gap">
+  <div class="container">
+    {% include "base/alert.html" %}
+
+    {% if user.is_authenticated %}
+    
+    <div class="billing_details">
+      <div class="row">
+        <div class="col-lg-8">
+          <h3>Billing Details</h3>
+              <form
+                class="row contact_form"
+                action=""
+                method="post"
+              >
+                <div class="col-md-6 form-group p_star">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="first"
+                    name="name"
+                    required
+                  />
+                  <span
+                    class="placeholder"
+                    data-placeholder="First name"
+                  ></span>
+                </div>
+                <div class="col-md-6 form-group p_star">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="last"
+                    name="name"
+                    required
+                  />
+                  <span class="placeholder" data-placeholder="Last name"></span>
+                </div>
+                <div class="col-md-6 form-group p_star">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="number"
+                    name="number"
+                    required
+                  />
+                  <span
+                    class="placeholder"
+                    data-placeholder="Phone number"
+                  ></span>
+                </div>
+                <div class="col-md-6 form-group p_star">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="email"
+                    name="compemailany"
+                    required
+                  />
+                  <span
+                    class="placeholder"
+                    data-placeholder="Email Address"
+                  ></span>
+                </div>
+                <div class="col-md-12 form-group p_star">
+                  <textarea
+                      class="form-control"
+                      name="address"
+                      id="address"
+                      rows="1"
+                      placeholder="Address"
+                      required
+                  ></textarea>
+                </div>
+                <div class="col-md-12 form-group p_star">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="city"
+                    name="city"
+                    required
+                  />
+                  <span class="placeholder" data-placeholder="Town/City"></span>
+                </div>
+                <div class="col-md-12 form-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="zip"
+                    name="zip"
+                    placeholder="Postcode/ZIP"
+                    required
+                  />
+                </div>
+              </form>
+        </div>
+        <div class="col-lg-4">
+          <div class="order_box">
+            <h2>Your Order</h2>
+            <ul class="list">
+              <li>
+                <a href="#">Product <span>Total</span></a>
+              </li>
+              {% for item in cart_items %}
+              <li>
+                <a href="#">
+                  {{ item.product.product_name }}
+                  <span class="">x {{ item.quantity }}</span>
+                </a>
+              </li>
+              {% endfor %}
+            </ul>
+            <ul class="list list_2">
+              <li><a href="#">Subtotal <span>${{ subtotal }}</span></a></li>
+              {% if coupon %}
+                <li><a href="#">Coupon "{{ coupon.coupon_code }}" Applied: <span>-₹{{ discount }}</span></a></li>
+              {% endif %}
+              <li><a href="#">Shipping <span>₹{{ shipping }}</span></a></li>
+              <li><a href="#">Total <span>₹{{ total }}</span></a></li>
+            </ul>
+            <br />
+            <a class="main_btn" href="#">Place Order</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% else %}
+    <div class="alert alert-danger" role="alert">
+      You must be logged in to view the checkout page. <a href="{% url 'login' %}">Click here to login</a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+<!--================End Checkout Area =================-->
+{% endblock %}

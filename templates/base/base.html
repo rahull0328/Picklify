@@ -22,6 +22,13 @@
   <!-- main css -->
   <link rel="stylesheet" href="{% static 'css/style.css' %}" />
   <link rel="stylesheet" href="{% static 'css/responsive.css' %}" />
+
+  <style>
+    .icon-large {
+      font-size: 1.25rem;
+    }
+  </style>
+
 </head>
 
 <body>
@@ -56,34 +63,10 @@
                         <a class="nav-link" href="{% url "product_list" %}">Shop Category</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" href="">Product Checkout</a>
+                        <a class="nav-link" href="{% url "checkout" %}">Product Checkout</a>
                       </li>
                       <li class="nav-item">
                         <a class="nav-link" href="{% url "cart" %}">Shopping Cart</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="nav-item submenu dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                      aria-expanded="false">Blog</a>
-                    <ul class="dropdown-menu">
-                      <li class="nav-item">
-                        <a class="nav-link" href="blog.html">Blog</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="single-blog.html">Blog Details</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="nav-item submenu dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                      aria-expanded="false">Pages</a>
-                    <ul class="dropdown-menu">
-                      <li class="nav-item">
-                        <a class="nav-link" href="tracking.html">Tracking</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="elements.html">Elements</a>
                       </li>
                     </ul>
                   </li>
@@ -95,16 +78,11 @@
 
               <div class="col-lg-5 pr-0">
                 <ul class="nav navbar-nav navbar-right right_nav pull-right">
-                  <li class="nav-item">
-                    <a href="#" class="icons">
-                      <i class="ti-search" aria-hidden="true"></i>
-                    </a>
-                  </li>
 
                   <li class="nav-item">
                     {% if request.user.is_authenticated %}
                     <a href="{% url 'cart' %}" class="icons" style="position: relative;">
-                        <i class="ti-shopping-cart"></i>
+                        <i class="ti-shopping-cart icon-large"></i>
                         <span id="cartBadge" class="badge">{{request.user.profile.get_cart_count}}</span>
                     </a>
                     {% else %}
@@ -120,20 +98,15 @@
                   <li class="nav-item">
                     {% if request.user.is_authenticated %}
                       <a href="{% url 'logout' %}" class="icons" title="Logout">
-                        <i class="ti-power-off" aria-hidden="true"></i>
+                        <i class="ti-power-off icon-large" aria-hidden="true"></i>
                       </a>
                     {% else %}
                       <a href="{% url 'register' %}" class="icons">
-                        <i class="ti-user" aria-hidden="true"></i>
+                        <i class="ti-user icon-large" aria-hidden="true"></i>
                       </a>
                     {% endif %}
                   </li>
 
-                  <li class="nav-item">
-                    <a href="#" class="icons">
-                      <i class="ti-heart" aria-hidden="true"></i>
-                    </a>
-                  </li>
                 </ul>
               </div>
             </div>
