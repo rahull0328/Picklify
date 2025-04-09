@@ -2,8 +2,14 @@
 {% load static %}
 {% block content %}
 <style>
+  .table-responsive {
+    overflow-x: auto;
+  }
+  .table td, .table th {
+    vertical-align: middle;
+  }
   .icon-large {
-    font-size: 24px;
+    font-size: 1.25rem;
   }
 </style>  
 
@@ -33,90 +39,86 @@
 
         {% if cart and cart_items %}
         <table class="table table-hover align-middle text-center">
-          <thead class="table-dark">
-            <tr>
-              <th scope="col">Product</th>
-              <th scope="col">Price</th>
-              <th scope="col">Quantity</th>
-              <th scope="col">Total</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for item in cart_items %}
-            <form method="POST" action="{% url 'update_cart' %}">
-              {% csrf_token %}
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center">
-                    <img src="{{ item.product.product_images.first.image.url }}" alt="{{ item.product.product_name }}" class="img-thumbnail me-3" style="width: 100px; height: 110px;">
-                    <p class="mb-0 fw-bold">{{ item.product.product_name }}</p>
-                  </div>
-                </td>
-                <td>
-                  <h5 class="fw-bold">₹ {{ item.get_product_price }}</h5>
-                </td>
-                <td>
-                  <div class="input-group quantity-input">
-                    <input type="number" class="form-control text-center" name="quantity" value="{{ item.quantity }}" min="1">
-                  </div>
-                </td>
-                <td>
-                  <h5 class="fw-bold">₹ {{ item.get_total_price }}</h5>
-                </td>
-                <td>
-                  <input type="hidden" name="item_uid" value="{{ item.uid }}">
-                  <button type="submit" name="update" class="btn btn-primary btn-outline-none btn-md">
-                    <i class="ti-pencil-alt"></i>
-                  </button>
-                  <a href="{% url 'remove_from_cart' item.uid %}" class="btn btn-md">
-                    <i class="ti-trash" aria-hidden="true"></i>
-                  </a>
-                </td>
-              </tr>
-            </form>
-            {% endfor %}
-              
-              <tr class="border-top">
-                <td colspan="2">
-                </td>
-              <td></td>
-              <td>
-                <h5 class="fw-bold">Subtotal</h5>
-              </td>
-              <td>
-                <h5 class="fw-bold" id="subtotal">₹&nbsp;{{ cart.get_cart_total }}</h5>
-              </td>
-            </tr>
-
-            <!-- Coupon Row -->
-            <tr>
-              <td colspan="3"></td>
-              <td colspan="2">
-                <form method="POST" action="" class="d-flex justify-content-end align-items-center gap-2 mt-2">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle text-center shadow-sm rounded bg-white">
+              <thead class="table-dark">
+                <tr>
+                  <th scope="col">Product</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Total</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="table-group-divider">
+                {% for item in cart_items %}
+                <form method="POST" action="{% url 'update_cart' %}">
                   {% csrf_token %}
-                  <input type="text" name="coupon" class="form-control" placeholder="Enter Coupon Code">
-                  <button type="submit" class="btn btn-success">Apply</button>
+                  <tr class="align-middle">
+                    <td>
+                      <div class="d-flex align-items-center gap-3">
+                        <img src="{{ item.product.product_images.first.image.url }}" alt="{{ item.product.product_name }}" class="img-fluid rounded" style="width: 90px; height: 90px; object-fit: cover;">&nbsp;&nbsp;
+                        <div class="text-start">
+                          <p class="mb-0 fw-semibold">{{ item.product.product_name }}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="fw-bold text-success">₹ {{ item.get_product_price }}</span>
+                    </td>
+                    <td>
+                      <div class="input-group input-group-sm w-75 mx-auto">
+                        <input type="number" class="form-control text-center" name="quantity" value="{{ item.quantity }}" min="1">
+                      </div>
+                    </td>
+                    <td>
+                      <span class="fw-bold">₹ {{ item.get_total_price }}</span>
+                    </td>
+                    <td>
+                      <input type="hidden" name="item_uid" value="{{ item.uid }}">
+                      <button type="submit" name="update" class="btn btn-sm btn-outline-primary me-1">
+                        <i class="ti-pencil-alt"></i>
+                      </button>
+                      <a href="{% url 'remove_from_cart' item.uid %}" class="btn btn-sm">
+                        <i class="ti-trash icon-large"></i>
+                      </a>
+                    </td>
+                  </tr>
                 </form>
-                <br/>
-                <div class="w-40">
-                  {% if cart.coupon %}
-                  <p>Applied Coupons:</p>
-                  <a href="{% url "remove_coupon" cart.uid %}" class="btn btn-success">{{ cart.coupon.coupon_code }}</a>
-                  {% endif %}
-                </div>
-              </td>
-            </tr>
-
-            <tr>
-              <td colspan="3"></td>
-              <td colspan="2">
-                <div class="d-flex justify-content-between">
-                  <a class="btn btn-outline-primary" href="{% url 'index' %}">Continue Shopping</a>
-                  <a class="btn btn-primary" href="#">Proceed to Checkout</a>
-                </div>
-              </td>
-            </tr>
+                {% endfor %}
+              
+                <tr class="border-top bg-light">
+                  <td colspan="3"></td>
+                  <td class="fw-semibold">Subtotal</td>
+                  <td class="fw-bold text-success">₹ {{ cart.get_cart_total }}</td>
+                </tr>
+                
+                <tr>
+                  <td colspan="3"></td>
+                  <td colspan="2">
+                    <form method="POST" action="" class="d-flex justify-content-end align-items-center gap-2 mt-2">
+                      {% csrf_token %}
+                      <input type="text" name="coupon" class="form-control" placeholder="Enter Coupon Code">
+                      <button type="submit" class="btn btn-success">Apply</button>
+                    </form>
+                    {% if cart.coupon %}
+                    <div class="mt-2 d-flex justify-content-end">
+                      <span class="me-2">Coupon Applied:</span>
+                      <a href="{% url 'remove_coupon' cart.uid %}" class="btn btn-sm btn-outline-success">{{ cart.coupon.coupon_code }}</a>
+                    </div>
+                    {% endif %}
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td colspan="3"></td>
+                  <td colspan="2">
+                    <div class="d-flex justify-content-between">
+                      <a class="btn btn-outline-primary" href="{% url 'index' %}">Continue Shopping</a>
+                      <a class="btn btn-primary" href="#">Proceed to Checkout</a>
+                    </div>
+                  </td>
+                </tr>
           </tbody>
         </table>
         {% else %}
@@ -135,7 +137,7 @@
     const input = document.getElementById(`qty-${uid}`);
     let qty = parseInt(input.value);
     qty = isNaN(qty) ? 1 : qty + delta;
-    if (qty < 1) qty = 1; // Minimum 1
+    if (qty < 1) qty = 1;
     input.value = qty;
   }
 </script>
