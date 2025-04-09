@@ -25,7 +25,7 @@ class Cart(BaseModel):
     def get_cart_total(self):
         total = 0
         for item in self.cart_items.all():
-            total += item.get_total_price()  # This already includes quantity
+            total += item.get_total_price() 
         if self.coupon:
             if self.coupon.minimum_amount < total:
                 return total - self.coupon.discount_price

@@ -103,7 +103,7 @@
                     </form>
                     {% if cart.coupon %}
                     <div class="mt-2 d-flex justify-content-end">
-                      <span class="me-2">Coupon Applied:</span>
+                      <span class="me-2">Coupon Applied:</span>&nbsp;
                       <a href="{% url 'remove_coupon' cart.uid %}" class="btn btn-sm btn-outline-success">{{ cart.coupon.coupon_code }}</a>
                     </div>
                     {% endif %}
@@ -115,7 +115,7 @@
                   <td colspan="2">
                     <div class="d-flex justify-content-between">
                       <a class="btn btn-outline-primary" href="{% url 'index' %}">Continue Shopping</a>
-                      <a class="btn btn-primary" href="#">Proceed to Checkout</a>
+                      <a class="btn btn-primary" href="{% url "checkout" %}">Proceed to Checkout</a>
                     </div>
                   </td>
                 </tr>

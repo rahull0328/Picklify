@@ -140,9 +140,6 @@ def remove_coupon(request, cart_id):
 def add_to_cart(request, uid):
     user = request.user
 
-    if not user.is_authenticated:
-        return redirect('accounts/login.html')  # Redirect to login page
-
     try:
         product = Product.objects.get(uid=uid)
     except Product.DoesNotExist:
@@ -178,9 +175,6 @@ def add_to_cart(request, uid):
 @login_required
 def remove_from_cart(request, cart_item_uid):
     user = request.user
-
-    if not user.is_authenticated:
-        return redirect('accounts/login.html')  # Redirect to login page
     
     try:
         cart_item = CartItems.objects.get(uid =cart_item_uid)
@@ -224,8 +218,8 @@ def contact_page(request):
             contact_obj.save()
             messages.success(request, "Your message has been sent successfully!")
         except Exception as e:
-            logger.error(f"Error saving contact message: {e}")  # Logs the actual error
-            messages.warning(request, f"Error: {e}")  # Show exact error (only for debugging)
+            logger.error(f"Error saving contact message: {e}")
+            messages.warning(request, f"Error: {e}")
             return HttpResponseRedirect(request.path_info)
 
         return HttpResponseRedirect(request.path_info)
@@ -235,5 +229,36 @@ def contact_page(request):
 @login_required
 def logout_view(request):
     logout(request)
-    messages.success(request, "You have been logged out successfully.")
     return redirect('/')
+
+def checkout_page(request):
+    cart_items = []
+    subtotal = 0
+    shipping = 50
+    total = 0
+    discount = 0
+
+    if not request.user.is_authenticated:
+        return render(request, 'checkout/checkout.html')
+
+    cart = Cart.objects.filter(user=request.user, is_paid=False).first()
+    if not cart:
+        return render(request, 'checkout/checkout.html', {'error': 'No active cart found'})
+
+    cart_items = cart.cart_items.all()
+    subtotal = sum(item.get_total_price() for item in cart_items)
+
+    # Calculate discount if coupon exists
+    if cart.coupon and subtotal >= cart.coupon.minimum_amount:
+        discount = cart.coupon.discount_price
+
+    total = subtotal - discount + shipping
+
+    return render(request, 'checkout/checkout.html', {
+        'cart_items': cart_items,
+        'subtotal': subtotal,
+        'discount': discount,
+        'shipping': shipping,
+        'total': total,
+        'coupon': cart.coupon,
+    })
