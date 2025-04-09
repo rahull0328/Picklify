@@ -30,12 +30,6 @@
       <div class="table-responsive">
         <!-- Alert Box -->
         {% include "base/alert.html" %}
-        
-        {% if not user.is_authenticated %}
-          <div class="alert alert-warning text-center">
-            Please <a href="{% url 'login' %}">log in</a> to view your cart.
-          </div>
-        {% endif %}
 
         {% if cart and cart_items %}
         <table class="table table-hover align-middle text-center">
@@ -50,38 +44,42 @@
           </thead>
           <tbody>
             {% for item in cart_items %}
-            <tr>
-              <td>
-                <div class="d-flex align-items-center">
-                  <img src="{{ item.product.product_images.first.image.url }}" alt="{{ item.product.product_name }}" class="img-thumbnail me-3" style="width: 100px; height: 110px;">
-                  &nbsp;&nbsp;<p class="mb-0 fw-bold">{{ item.product.product_name }}</p>
-                </div>
-              </td>
-              <td>
-                <h5 class="fw-bold">₹&nbsp;{{ item.get_product_price }}</h5>
-              </td>
-              <td>
-                <div class="input-group quantity-input">
-                  <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity(-1)">-</button>
-                  <input type="text" class="form-control text-center" name="qty" value="{{ item.quantity }}" readonly>
-                  <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity(1)">+</button>
-                </div>
-              </td>
-              <td>
-                <h5 class="fw-bold" id="total-{{ item.uid }}">₹&nbsp;{{ item.get_product_price }}</h5>
-              </td>
-              <td>
-                <a href="{% url 'remove_from_cart' item.uid %}" class="text-primary me-2">
-                  <i class="ti-trash icon-large" aria-hidden="true"></i>
-                </a>
-              </td>
-            </tr>
+            <form method="POST" action="{% url 'update_cart' %}">
+              {% csrf_token %}
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <img src="{{ item.product.product_images.first.image.url }}" alt="{{ item.product.product_name }}" class="img-thumbnail me-3" style="width: 100px; height: 110px;">
+                    <p class="mb-0 fw-bold">{{ item.product.product_name }}</p>
+                  </div>
+                </td>
+                <td>
+                  <h5 class="fw-bold">₹ {{ item.get_product_price }}</h5>
+                </td>
+                <td>
+                  <div class="input-group quantity-input">
+                    <input type="number" class="form-control text-center" name="quantity" value="{{ item.quantity }}" min="1">
+                  </div>
+                </td>
+                <td>
+                  <h5 class="fw-bold">₹ {{ item.get_total_price }}</h5>
+                </td>
+                <td>
+                  <input type="hidden" name="item_uid" value="{{ item.uid }}">
+                  <button type="submit" name="update" class="btn btn-primary btn-outline-none btn-md">
+                    <i class="ti-pencil-alt"></i>
+                  </button>
+                  <a href="{% url 'remove_from_cart' item.uid %}" class="btn btn-md">
+                    <i class="ti-trash" aria-hidden="true"></i>
+                  </a>
+                </td>
+              </tr>
+            </form>
             {% endfor %}
-
-            <tr class="border-top">
-              <td colspan="2">
-                <a class="btn btn-outline-secondary btn-sm" href="#">Update Cart</a>
-              </td>
+              
+              <tr class="border-top">
+                <td colspan="2">
+                </td>
               <td></td>
               <td>
                 <h5 class="fw-bold">Subtotal</h5>
@@ -97,7 +95,7 @@
               <td colspan="2">
                 <form method="POST" action="" class="d-flex justify-content-end align-items-center gap-2 mt-2">
                   {% csrf_token %}
-                  <input type="text" name="coupon" class="form-control" placeholder="Enter Coupon Code" required>
+                  <input type="text" name="coupon" class="form-control" placeholder="Enter Coupon Code">
                   <button type="submit" class="btn btn-success">Apply</button>
                 </form>
                 <br/>
@@ -131,5 +129,15 @@
     </div>
   </div>
 </section>
+
+<script>
+  function changeQuantity(uid, delta) {
+    const input = document.getElementById(`qty-${uid}`);
+    let qty = parseInt(input.value);
+    qty = isNaN(qty) ? 1 : qty + delta;
+    if (qty < 1) qty = 1; // Minimum 1
+    input.value = qty;
+  }
+</script>
 
 {% endblock %}

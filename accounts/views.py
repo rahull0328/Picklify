@@ -1,9 +1,8 @@
-from django.shortcuts import render
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Profile
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
@@ -130,7 +129,6 @@ def cart(request):
 
     return render(request, 'cart/cart.html', context)
 
-
 def remove_coupon(request, cart_id):
     cart = Cart.objects.get(uid=cart_id)
     cart.coupon = None
@@ -190,6 +188,28 @@ def remove_from_cart(request, cart_item_uid):
     except Exception as e:
         print(f"Error removing from cart: {e}")
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@login_required
+def update_cart(request):
+    if request.method == 'POST':
+
+        item_uid = request.POST.get('item_uid')
+        quantity = request.POST.get('quantity')
+
+        try:
+            quantity = int(quantity)
+            if quantity < 1:
+                return HttpResponseBadRequest("Invalid quantity")
+
+            cart_item = CartItems.objects.get(uid=item_uid, cart__user=request.user)
+            cart_item.quantity = quantity
+            cart_item.save()
+
+        except Exception as e:
+            return HttpResponseBadRequest("Something went wrong")
+
+    return redirect(request.META.get('HTTP_REFERER', 'cart'))
+
 
 def contact_page(request):
     if request.method == 'POST':
