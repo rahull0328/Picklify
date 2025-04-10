@@ -6,7 +6,7 @@ from django.conf import settings
 
 def save_pdf(params: dict):
     try:
-        template = get_template('receipt/invoice.html')
+        template = get_template('emails/invoice.html')
         html = template.render(params)
 
         # Create a BytesIO buffer to store the PDF
