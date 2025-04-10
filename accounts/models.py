@@ -69,3 +69,17 @@ class ContactMessage(models.Model):
     subject = models.CharField(max_length=255)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    
+class BillingDetails(BaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='billing_details')
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    address = models.TextField()
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    postal_code = models.CharField(max_length=20)
+    
+    def __str__(self):
+        return f'{self.full_name} - {self.user.email}'

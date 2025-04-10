@@ -37,12 +37,13 @@
                 action=""
                 method="post"
               >
+              {% csrf_token %}
                 <div class="col-md-6 form-group p_star">
                   <input
                     type="text"
                     class="form-control"
-                    id="first"
-                    name="name"
+                    id="first_name"
+                    name="first_name"
                     required
                   />
                   <span
@@ -54,8 +55,8 @@
                   <input
                     type="text"
                     class="form-control"
-                    id="last"
-                    name="name"
+                    id="last_name"
+                    name="last_name"
                     required
                   />
                   <span class="placeholder" data-placeholder="Last name"></span>
@@ -64,8 +65,8 @@
                   <input
                     type="text"
                     class="form-control"
-                    id="number"
-                    name="number"
+                    id="phone"
+                    name="phone"
                     required
                   />
                   <span
@@ -78,7 +79,7 @@
                     type="text"
                     class="form-control"
                     id="email"
-                    name="compemailany"
+                    name="email"
                     required
                   />
                   <span
@@ -96,7 +97,7 @@
                       required
                   ></textarea>
                 </div>
-                <div class="col-md-12 form-group p_star">
+                <div class="col-md-6 form-group p_star">
                   <input
                     type="text"
                     class="form-control"
@@ -105,16 +106,35 @@
                     required
                   />
                   <span class="placeholder" data-placeholder="Town/City"></span>
-                </div>
-                <div class="col-md-12 form-group">
+                </div>  
+                <div class="col-md-6 form-group">
                   <input
                     type="text"
                     class="form-control"
-                    id="zip"
-                    name="zip"
+                    id="postal_code"
+                    name="postal_code"
                     placeholder="Postcode/ZIP"
                     required
                   />
+                </div>
+                <div class="col-md-12 form-group p_star">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="state"
+                    name="state"
+                    required
+                  />
+                  <span class="placeholder" data-placeholder="State"></span>
+                </div>
+                <div class="col-md-9 form-group p_star">
+                  <label>
+                    <input type="checkbox" name="confirm_order" required />
+                    Are you sure you want to place the order?
+                  </label>
+                </div>
+                <div class="col-md-3 form-group p_star">
+                  <button type="submit" class="main_btn">Place Order</button>
                 </div>
               </form>
         </div>
@@ -135,15 +155,14 @@
               {% endfor %}
             </ul>
             <ul class="list list_2">
-              <li><a href="#">Subtotal <span>${{ subtotal }}</span></a></li>
+              <li><a href="#">Subtotal <span>₹{{ subtotal }}</span></a></li>
               {% if coupon %}
                 <li><a href="#">Coupon "{{ coupon.coupon_code }}" Applied: <span>-₹{{ discount }}</span></a></li>
               {% endif %}
               <li><a href="#">Shipping <span>₹{{ shipping }}</span></a></li>
               <li><a href="#">Total <span>₹{{ total }}</span></a></li>
             </ul>
-            <br />
-            <a class="main_btn" href="#">Place Order</a>
+            
           </div>
         </div>
       </div>
