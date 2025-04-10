@@ -1,65 +1,110 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice Receipt</title>
+    <title>Invoice Receipt - Picklify</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 40px;
-            padding: 20px;
-            border: 1px solid #ccc;
+            padding: 30px;
+            border: 2px solid #eee;
+            max-width: 800px;
+            margin: auto;
         }
-        h1, h2 {
-            margin: 0;
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo {
+            width: 150px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        h1 {
+            margin: 10px 0;
+            font-size: 28px;
+            color: #333;
+        }
+        .highlight {
+            color: #2E86C1;
+            font-size: 16px;
+            margin-top: -10px;
+        }
+        .info, .footer {
+            margin-top: 30px;
+            font-size: 14px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-        th, td {
-            border: 1px solid black;
-            padding: 10px;
-            text-align: left;
+        th {
+            background-color: #f2f2f2;
+            border: 1px solid #ddd;
+            padding: 12px;
+        }
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
         }
         .footer {
-            margin-top: 20px;
-            font-size: 12px;
             color: gray;
+            text-align: center;
+            font-size: 12px;
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
-    <h1>Invoice Receipt</h1>
-    <p><strong>Invoice Number:</strong> {{ data.id }}</p>
 
-    <h2>Service Provider</h2>
-    <p><strong>Picklify Ecommerce</strong><br>
-       1001A, The Capital B Wing, 10th Floor, Bandra Kurla Complex, Bandra (E), Mumbai<br>
-       Contact: 9876543210</p>
+    <div class="header">
+        <img src="{% static "img/logo.webp" %}" alt="Picklify Logo" class="logo">
+        <h1>Picklify Invoice Receipt</h1>
+        <p class="highlight">Thank you for your order! We hope you love your purchase 🎉</p>
+    </div>
 
-    <p><strong>Order Date:</strong> {{ data.order_date }}</p>
-    <p><strong>Customer Name:</strong> {{ data.name }}</p>
-    <p><strong>Address:</strong> {{ data.address }}</p>
+    <p><strong>Invoice Number:</strong> {{ id }}</p>
+    <p><strong>Order Date:</strong> {{ order_date }}</p>
 
+    <h2>Customer Details</h2>
+    <p><strong>Name:</strong> {{ name }}</p>
+    <p><strong>Address:</strong> {{ address }}</p>
+    <p><strong>Payment Method:</strong> {{ pay_method }}</p>
+
+    <h2>Order Summary</h2>
     <table>
-        <tr>
-            <th>Description</th>
-            <th>Bill Amount</th>
-        </tr>
-        <tr>
-            <td>{{ data.description }}</td>
-            <td>{{ data.amount }}</td>
-        </tr>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.quantity }}</td>
+                <td>₹{{ product.price }}</td>
+                <td>₹{{ product.total }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3"><strong>Grand Total</strong></td>
+                <td><strong>₹{{ amount }}</strong></td>
+            </tr>
+        </tbody>
     </table>
 
-    <p><strong>Please Note:</strong></p>
-    <p>Dear Consumer, the bill payment will reflect in the next 48 hours in your account. Please contact our customer support for any queries regarding this order.</p>
+    <div class="info">
+        <p><strong>Please Note:</strong> Your payment will reflect in your account within 48 hours. If you have any concerns, please reach out to our support team.</p>
+        <p><strong>Delivery Address:</strong> {{ address }}</p>
+    </div>
 
-    <p><strong>Thank you for using our service</strong></p>
+    <p class="footer">(This is a computer-generated invoice and does not require a physical signature.)</p>
 
-    <p class="footer">(This is a computer-generated receipt and does not require a physical signature.)</p>
 </body>
 </html>

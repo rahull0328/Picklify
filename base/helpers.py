@@ -21,6 +21,7 @@ def save_pdf(params: dict):
         # Generating a unique file name
         file_name = f"{uuid.uuid4()}.pdf"
         file_path = str(settings.BASE_DIR) + f"/public/static/{file_name}.pdf"
+        print("PDF saved to:", file_path)
 
         # Save the PDF file
         with open(file_path, 'wb+') as output:

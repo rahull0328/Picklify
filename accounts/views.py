@@ -230,28 +230,30 @@ def logout_view(request):
 from accounts.models import BillingDetails  # adjust if placed elsewhere
 
 def checkout_page(request):
-    cart = None
     cart_items = []
     subtotal = 0
     shipping = 50
     total = 0
+    discount = 0
 
-    if request.user.is_authenticated:
-        cart = Cart.objects.filter(user=request.user, is_paid=False).first()
-        if cart:
-            cart_items = cart.cart_items.all()
-            subtotal = sum(item.get_total_price() for item in cart_items)
-            total = subtotal + shipping
-        else:
-            return render(request, 'checkout/checkout.html', {'error': 'No active cart found'})
+    if not request.user.is_authenticated:
+        return render(request, 'checkout/checkout.html')
+    
+    cart = Cart.objects.filter(user=request.user, is_paid=False).first()
+    if not cart:
+        return render(request, 'checkout/checkout.html', {'error': 'No active cart found'})
+    
+    cart_items = cart.cart_items.all()
+    subtotal = sum(item.get_total_price() for item in cart_items)
+
+    # Apply coupon discount if applicable
+    if cart.coupon and subtotal >= cart.coupon.minimum_amount:
+        discount = cart.coupon.discount_price
+    
+    total = subtotal - discount + shipping
 
     # Handle billing form POST
     if request.method == 'POST':
-        if not request.user.is_authenticated:
-            messages.error(request, "Please log in to place your order.")
-            return redirect('login_page')
-
-        # Save billing details
         billing = BillingDetails.objects.create(
             user=request.user,
             first_name=request.POST.get('first_name'),
@@ -271,34 +273,34 @@ def checkout_page(request):
         # Prepare invoice data
         invoice_data = {
             "name": f"{billing.first_name} {billing.last_name}",
-            "id": cart.id,
+            "id": cart.uid,
             "email": billing.email,
             "order_date": timezone.now().strftime("%d-%m-%Y"),
             "amount": total,
             "address": f"{billing.address}, {billing.city}, {billing.state} - {billing.postal_code}",
             "pay_method": "Cash on Delivery",
             "products": [{
-                "name": item.product.name,
+                "name": item.product.product_name,
                 "quantity": item.quantity,
                 "price": item.product.price,
                 "total": item.get_total_price()
             } for item in cart_items]
         }
 
-        # Generate PDF invoice
+        # Generate PDF and send invoice
         file_name, status = save_pdf(invoice_data)
-
-        # Send email with invoice
         if status:
             invoice_path = os.path.join(settings.BASE_DIR, "public", "static", f"{file_name}.pdf")
             send_order_invoice_email(billing.email, invoice_path, invoice_data)
 
-        messages.success(request, "Order placed successfully! The invoice receipt has been emailed to your registered address.")
-        return redirect('/')
+        messages.success(request, "Order placed successfully! The invoice has been emailed.")
+        return redirect('checkout')
 
     return render(request, 'checkout/checkout.html', {
         'cart_items': cart_items,
         'subtotal': subtotal,
+        'discount': discount,
         'shipping': shipping,
         'total': total,
+        'coupon': cart.coupon,
     })
