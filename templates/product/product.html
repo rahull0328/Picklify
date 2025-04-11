@@ -37,8 +37,8 @@
           <p>Very us move be blessed multiply night</p>
         </div>
         <div class="page_link">
-          <a href="index.html">Home</a>
-          <a href="single-product.html">Product Details</a>
+          <a href="{% url "index" %}">Home</a>
+          <a href="{% url "product_list" %}">Product Details</a>
         </div>
       </div>
     </div>
@@ -131,32 +131,6 @@
               </div>
             </div>
 
-          <div class="product_count">
-            <label for="qty">Quantity:</label>
-            <input
-              type="text"
-              name="qty"
-              id="sst"
-              maxlength="12"
-              value="1"
-              title="Quantity:"
-              class="input-text qty"
-            />
-            <button
-              onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-              class="increase items-count"
-              type="button"
-            >
-              <i class="lnr lnr-chevron-up"></i>
-            </button>
-            <button
-              onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-              class="reduced items-count"
-              type="button"
-            >
-              <i class="lnr lnr-chevron-down"></i>
-            </button>
-          </div>
           <div class="card_area">
             <a class="main_btn" id="addToCartBtn" href="{% url 'add_to_cart' product.uid %}?variant={{selected_size}}&color={{ selected_color }}">Add to Cart</a>
             <a class="icon_btn" href="#">
