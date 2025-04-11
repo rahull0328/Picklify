@@ -18,9 +18,9 @@ Welcome to **Picklify**, an advanced e-commerce platform built using the Django 
 - **Add to Cart**: Users can add products to their shopping cart.
 - **Checkout**: Users can review their cart items before proceeding to payment.
 
-### 💳 Payment Gateway Integration
-- **Secure Payments**: Integration with a payment gateway for seamless online transactions.
-- **Order Summary**: Users receive a detailed order summary post-payment.
+### Invoice Generation
+- **Smooth Checkouts**: xhtml2pdf module used for generation of pdfs.
+- **Invoive Attachments**: Receive an invoice of the order placed on the provided email address for successful placement of orders.
 
 ### 🛠️ Load Testing
 - **Performance Testing**: Conduct load tests to ensure the application performs well under high traffic.
