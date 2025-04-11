@@ -63,7 +63,7 @@ def  send_email_token(sender , instance , created , **kwargs):
         print(e)
 
 class ContactMessage(models.Model):
-    uid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)  # Remove unique=True for now
+    uid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     name = models.CharField(max_length=255)
     email = models.EmailField()
     subject = models.CharField(max_length=255)

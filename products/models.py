@@ -51,6 +51,26 @@ class Product(BaseModel):
     def get_products_by_color(self, color):
         return Product.objects.filter(color_variant__color_name=color)
     
+    def get_product_color_by_color(self, color):
+        return self.price + ColorVariant.objects.get(color_name=color).price
+    
+    def get_price_based_on_variants(self, size=None, color=None):
+        final_price = self.price
+
+        if size:
+            final_price = SizeVariant.objects.get(size_name=size).price + self.price
+
+        if color:
+            final_price = ColorVariant.objects.get(color_name=color).price + self.price
+
+        # If both size and color are selected, stack both prices
+        if size and color:
+            size_price = SizeVariant.objects.get(size_name=size).price
+            color_price = ColorVariant.objects.get(color_name=color).price
+            final_price = self.price + size_price + color_price
+
+        return final_price
+    
 class ProductImage(BaseModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="product_images")
     image = models.ImageField(upload_to="product") 
