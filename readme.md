@@ -10,7 +10,6 @@ Welcome to **Picklify**, an advanced e-commerce platform built using the Django 
 - **Register**: Users can sign up with a valid email address and password.
 - **Login**: Secure login functionality with session management.
 - **Email Verification**: Users must verify their email to activate their account.
-- **Password Reset**: Allows users to reset their password via email.
 
 ### 📦 Product Management
 - **Product Catalog**: View a list of available products with detailed descriptions.
@@ -21,9 +20,6 @@ Welcome to **Picklify**, an advanced e-commerce platform built using the Django 
 ### Invoice Generation
 - **Smooth Checkouts**: xhtml2pdf module used for generation of pdfs.
 - **Invoive Attachments**: Receive an invoice of the order placed on the provided email address for successful placement of orders.
-
-### 🛠️ Load Testing
-- **Performance Testing**: Conduct load tests to ensure the application performs well under high traffic.
 
 ---
 
