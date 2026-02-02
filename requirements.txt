@@ -1,0 +1,11 @@
+# Django Web Framework
+Django>=5.1,<6.0
+
+# Environment variable management
+python-dotenv>=1.0.0
+
+# PDF generation for invoices
+xhtml2pdf>=0.2.5
+
+# Image processing (PIL)
+Pillow>=10.0.0
