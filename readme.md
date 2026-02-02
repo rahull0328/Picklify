@@ -53,7 +53,11 @@ Welcome to **Picklify**, an advanced e-commerce platform built using the Django 
    ```bash
    cd env/scripts/activate
 
-4. Starting the Development Server:
+4. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+
+5. Starting the Development Server:
    ```bash
    cd picklify
    python manage.py runserver
